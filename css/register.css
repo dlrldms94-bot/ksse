@@ -1,0 +1,105 @@
+/* ===== 사전등록 (register.html) ===== */
+.form-group {
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.form-group:last-of-type { border-bottom: none; }
+.form-label {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 12px;
+}
+.form-label.form-label--follow {
+  margin-top: 16px;
+}
+.form-label .num { margin-right: 4px; }
+.form-label .req { color: var(--required); margin-left: 2px; }
+.form-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+.forum-apply-options {
+  gap: 12px;
+}
+.forum-apply-option {
+  align-items: flex-start;
+  line-height: 1.55;
+  max-width: 720px;
+}
+.forum-apply-option input {
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.form-control {
+  width: 100%;
+  max-width: 480px;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(27, 94, 170, 0.12);
+}
+.form-control.is-error {
+  border-color: var(--required);
+}
+.consent-box {
+  width: 100%;
+  height: 160px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fafbfd;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #445;
+  margin-bottom: 14px;
+  white-space: pre-wrap;
+}
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+.radio-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.radio-item input { accent-color: var(--blue); width: 16px; height: 16px; }
+.radio-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.other-input {
+  margin-left: 24px;
+  margin-top: 6px;
+  max-width: 320px;
+  display: none;
+}
+.other-input.is-visible { display: block; }
+.field-error {
+  font-size: 13px;
+  color: var(--required);
+  margin-top: 6px;
+  display: none;
+}
+.field-error.is-visible { display: block; }
+
+@media (max-width: 768px) {
+  .form-control { max-width: 100%; }
+  .btn-group { flex-wrap: wrap; }
+}

@@ -1,0 +1,76 @@
+/* ===== 사전등록 관리 (register-admin.html) ===== */
+.admin-gate-hint {
+  margin-bottom: 20px;
+  margin-top: -8px;
+}
+.admin-login-form .form-control {
+  max-width: 320px;
+}
+.admin-app[hidden],
+#admin-gate[hidden] {
+  display: none !important;
+}
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.admin-toolbar .section-title {
+  margin-bottom: 0;
+}
+.admin-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.admin-fetch-error[hidden] {
+  display: none !important;
+}
+.admin-fetch-error {
+  margin-bottom: 16px;
+}
+
+.reg-admin-board {
+  border-radius: 12px 12px 0 0;
+}
+.reg-table-wrap {
+  overflow-x: auto;
+}
+.reg-admin-table {
+  min-width: 960px;
+}
+.reg-admin-table thead th {
+  text-align: center;
+  white-space: nowrap;
+}
+.reg-admin-table thead th:nth-child(1) {
+  width: 64px;
+  text-align: center;
+}
+.reg-admin-table tbody td {
+  text-align: center;
+  font-size: 15px;
+}
+.reg-admin-table tbody td.reg-col-title {
+  text-align: left;
+  max-width: 200px;
+}
+.reg-admin-table tbody td.reg-col-title .reg-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.reg-admin-table tbody td.reg-col-forum {
+  text-align: left;
+  font-size: 13px;
+  max-width: 280px;
+}
+
+@media (max-width: 768px) {
+  .admin-toolbar {
+    flex-direction: column;
+  }
+}

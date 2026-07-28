@@ -1,0 +1,114 @@
+/* ===== Overview card ===== */
+.overview-card {
+  padding: 0;
+  overflow: hidden;
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--blue-soft);
+  box-shadow: 0 4px 24px rgba(27, 94, 170, 0.06);
+}
+
+.overview-card .overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.4fr) minmax(0, 0.6fr);
+  gap: 0;
+  align-items: stretch;
+  min-height: 520px;
+}
+
+.overview-card .overview-poster {
+  background: var(--blue-pale);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overview-card .overview-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.overview-card .overview-info {
+  padding: 40px 44px 40px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.overview-card .section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  border: 0;
+}
+
+.overview-card .section-title .dot {
+  width: 12px;
+  height: 12px;
+  background: var(--blue);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.overview-card .info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.overview-card .info-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.overview-card .info-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 4px 16px;
+  background: var(--blue-bg);
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 999px;
+  font-size: clamp(14px, calc(13px + 0.35vw), 16px);
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.overview-card .info-value {
+  font-size: clamp(15px, calc(15px + 0.45vw), 18px);
+  line-height: 1.6;
+  padding-top: 4px;
+  color: #234;
+}
+
+@media (max-width: 960px) {
+  .overview-card .overview-grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .overview-card .overview-info { padding: 28px 24px; }
+  .overview-card .info-row { grid-template-columns: 90px 1fr; }
+}
+
+@media (max-width: 768px) {
+  .overview-card .overview-grid {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .overview-card .overview-info { padding: 28px 20px; }
+  .overview-card .section-title { font-size: 22px; }
+  .overview-card .info-row { grid-template-columns: 90px 1fr; }
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공지 관리 | 2026 대한민국 사회서비스 박람회</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/register.css">
+  <link rel="stylesheet" href="css/notice.css">
+  <link rel="stylesheet" href="css/notice-admin.css">
+</head>
+<body data-breadcrumb='[{"label":"홈","href":"index.html"},{"label":"공지 관리"}]'>
+  <div id="site-header"></div>
+  <main class="page-main">
+    <div id="breadcrumb"></div>
+    <div class="page-inner">
+      <div class="content-card" id="admin-gate">
+        <h1 class="section-title"><span class="dot"></span>공지사항 관리</h1>
+        <p class="form-hint admin-gate-hint">관리자 비밀번호로 로그인 후 공지를 작성·수정할 수 있습니다.</p>
+        <form id="login-form" class="admin-login-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="admin-password">관리자 비밀번호</label>
+            <input class="form-control" type="password" id="admin-password" name="password" autocomplete="current-password">
+            <p class="field-error" id="err-login">비밀번호가 올바르지 않습니다.</p>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" type="submit">로그인</button>
+            <a class="btn btn-outline" href="notice.html">공지 목록</a>
+          </div>
+        </form>
+      </div>
+
+      <div class="content-card admin-app" id="admin-app" hidden>
+        <div class="admin-toolbar">
+          <h1 class="section-title"><span class="dot"></span>공지사항 관리</h1>
+          <div class="admin-toolbar-actions">
+            <button type="button" class="btn btn-primary" id="btn-new">새 글 작성</button>
+            <a class="btn btn-outline" href="notice.html">공지 목록</a>
+            <button type="button" class="btn btn-outline" id="btn-logout">로그아웃</button>
+          </div>
+        </div>
+
+        <section class="admin-section" id="admin-list-section">
+          <h2 class="admin-subtitle">등록된 공지</h2>
+          <div class="notice-board admin-list-board">
+            <table class="notice-table">
+              <thead>
+                <tr>
+                  <th scope="col">번호</th>
+                  <th scope="col">제목</th>
+                  <th scope="col">날짜</th>
+                  <th scope="col">관리</th>
+                </tr>
+              </thead>
+              <tbody id="admin-notice-list"></tbody>
+            </table>
+          </div>
+          <p class="notice-empty" id="admin-list-empty" hidden>등록된 공지가 없습니다.</p>
+        </section>
+
+        <section class="admin-section" id="admin-editor-section" hidden>
+          <h2 class="admin-subtitle" id="editor-heading">글 작성</h2>
+          <form id="notice-form" novalidate>
+            <input type="hidden" id="notice-id" name="id" value="">
+            <div class="form-group">
+              <label class="form-label" for="notice-title">제목<span class="req">*</span></label>
+              <input class="form-control form-control-wide" type="text" id="notice-title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="notice-date">날짜<span class="req">*</span></label>
+              <input class="form-control" type="date" id="notice-date" name="date" required>
+            </div>
+            <div class="form-group">
+              <p class="form-label">본문 구성<span class="req">*</span></p>
+              <p class="form-hint">텍스트, 이미지, 문서, 유튜브 영상을 순서대로 추가할 수 있습니다. (첨부는 브라우저 저장소에 저장됩니다.)</p>
+              <div class="block-toolbar">
+                <button type="button" class="btn btn-outline btn-sm" data-add-block="text">+ 텍스트</button>
+                <button type="button" class="btn btn-outline btn-sm" data-add-block="image">+ 이미지</button>
+                <button type="button" class="btn btn-outline btn-sm" data-add-block="file">+ 문서</button>
+                <button type="button" class="btn btn-outline btn-sm" data-add-block="youtube">+ 유튜브</button>
+              </div>
+              <div id="blocks-root" class="blocks-root"></div>
+              <p class="field-error" id="err-blocks">본문 블록을 1개 이상 추가해 주세요.</p>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary" type="submit">저장</button>
+              <button class="btn btn-outline" type="button" id="btn-cancel-edit">취소</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+  <div id="site-footer"></div>
+  <script src="js/common.js"></script>
+  <script src="js/notice-content.js"></script>
+  <script src="js/notice-admin.js"></script>
+</body>
+</html>

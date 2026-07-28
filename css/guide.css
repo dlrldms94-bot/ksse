@@ -1,0 +1,73 @@
+/* ===== 참관 안내 (guide.html) ===== */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+.info-table th,
+.info-table td {
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  font-size: 18px;
+  text-align: left;
+  vertical-align: top;
+}
+.info-table th {
+  width: 120px;
+  background: #f5f7fa;
+  color: var(--blue);
+  font-weight: 600;
+  text-align: center;
+}
+.process-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.process-step {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--green-soft);
+  border-radius: 12px;
+  padding: 2em 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #3a5a2a;
+  line-height: 1.3;
+}
+.process-arrow {
+  font-size: 22px;
+  color: var(--green);
+  font-weight: 700;
+  flex-shrink: 0;
+  align-self: center;
+}
+.map-embed {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--blue-pale);
+  aspect-ratio: 4 / 3;
+  max-height: 450px;
+}
+.map-embed iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .process-flow { flex-direction: column; }
+  .process-arrow { transform: rotate(90deg); }
+}

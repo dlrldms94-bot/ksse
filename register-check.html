@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사전신청확인 | 2026 대한민국 사회서비스 박람회</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/register.css">
+  <link rel="stylesheet" href="css/register-check.css">
+</head>
+<body
+  data-nav="register"
+  data-breadcrumb='[{"label":"홈","href":"index.html"},{"label":"사전등록","href":"register.html"},{"label":"사전신청확인"}]'>
+  <div id="site-header"></div>
+  <main class="page-main">
+
+    <div id="breadcrumb"></div>
+
+    <div class="page-inner">
+      <div class="content-card">
+        <h1 class="section-title"><span class="dot"></span>사전신청확인</h1>
+        <p class="form-hint check-intro-hint">
+          사전등록 시 입력하신 이름, 휴대폰 번호, 확인용 비밀번호로 신청 내역을 조회할 수 있습니다.
+        </p>
+
+        <form id="check-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="name">이름<span class="req">*</span></label>
+            <input class="form-control" type="text" id="name" name="name" autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">휴대폰 번호<span class="req">*</span></label>
+            <input class="form-control" type="tel" id="phone" name="phone" placeholder="ex) 010-0000-0000" inputmode="tel">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="password">사전등록 확인용 비밀번호<span class="req">*</span></label>
+            <input class="form-control" type="password" id="password" name="password" autocomplete="current-password">
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" type="submit">조회하기</button>
+            <a class="btn btn-outline" href="register.html">사전등록 하기</a>
+          </div>
+        </form>
+
+        <div id="check-result" class="check-result" aria-live="polite"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/common.js"></script>
+  <script src="js/register-check.js"></script>
+</body>
+</html>

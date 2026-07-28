@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사전등록 | 2026 대한민국 사회서비스 박람회</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/register.css">
+</head>
+<body
+  data-nav="register"
+  data-breadcrumb='[{"label":"홈","href":"index.html"},{"label":"사전등록","href":"register.html"},{"label":"사전등록"}]'>
+  <div id="site-header"></div>
+  <main class="page-main">
+
+    <div id="breadcrumb"></div>
+
+    <div class="page-inner">
+      <div class="content-card">
+        <h1 class="section-title"><span class="dot"></span>사전등록</h1>
+
+        <form id="register-form" novalidate>
+          <div class="form-group">
+            <label class="form-label"><span class="num">1.</span>개인정보 수집·이용 동의<span class="req">*</span></label>
+            <div class="consent-box" tabindex="0">【개인정보 수집·이용 동의】
+
+2026 대한민국 사회서비스 박람회 사전등록을 위해 아래와 같이 개인정보를 수집·이용합니다.
+
+1. 수집 항목: 이름, 소속 기관 및 기업명, 소속 유형, 직함/직책, 휴대폰 번호, 이메일 주소
+2. 수집 목적: 사전등록 확인, 입장 QR 발송, 행사 안내 및 만족도 조사
+3. 보유 및 이용 기간: 행사 종료 후 3개월까지 (이후 지체 없이 파기)
+4. 동의 거부 권리: 동의를 거부할 수 있으며, 거부 시 사전등록이 제한됩니다.
+
+위 내용을 확인하였으며, 개인정보 수집·이용에 동의합니다.</div>
+            <div class="radio-group">
+              <label class="radio-item"><input type="radio" name="consent" value="agree"> 동의합니다.</label>
+              <label class="radio-item"><input type="radio" name="consent" value="disagree"> 동의하지 않습니다.</label>
+            </div>
+            <p class="form-hint">※ 동의하지 않으실 경우 사전등록이 불가능합니다.</p>
+            <p class="field-error" id="err-consent">개인정보 수집·이용에 동의해 주세요.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="name"><span class="num">2.</span>이름<span class="req">*</span></label>
+            <input class="form-control" type="text" id="name" name="name" autocomplete="name">
+            <p class="field-error" id="err-name">이름을 입력해 주세요.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="org"><span class="num">3.</span>소속 기관 및 기업명<span class="req">*</span></label>
+            <input class="form-control" type="text" id="org" name="org" placeholder="ex)">
+            <p class="field-error" id="err-org">소속 기관 및 기업명을 입력해 주세요.</p>
+          </div>
+
+          <div class="form-group">
+            <p class="form-label"><span class="num">4.</span>소속 유형 및 분류<span class="req">*</span></p>
+            <div class="radio-stack">
+              <label class="radio-item"><input type="radio" name="orgType" value="공공기관/지자체"> 공공기관/지자체</label>
+              <label class="radio-item"><input type="radio" name="orgType" value="대학(원)생"> 대학(원)생</label>
+              <label class="radio-item"><input type="radio" name="orgType" value="교수/강사"> 교수/강사</label>
+              <label class="radio-item"><input type="radio" name="orgType" value="기타 유관기관 및 기업"> 기타 유관기관 및 기업</label>
+              <label class="radio-item"><input type="radio" name="orgType" value="사회서비스원"> 사회서비스원</label>
+              <label class="radio-item"><input type="radio" name="orgType" value="기타"> 기타 (직접입력)</label>
+            </div>
+            <div class="other-input" id="org-other">
+              <input class="form-control" type="text" name="orgOther" placeholder="기타 유형을 입력해 주세요">
+            </div>
+            <p class="field-error" id="err-orgType">소속 유형을 선택해 주세요.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="title"><span class="num">5.</span>직함 / 직책<span class="req">*</span></label>
+            <input class="form-control" type="text" id="title" name="title" placeholder="ex) 주임, 과장, 사무관 등">
+            <p class="field-error" id="err-title">직함/직책을 입력해 주세요.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="phone"><span class="num">6.</span>휴대폰 번호<span class="req">*</span></label>
+            <input class="form-control" type="tel" id="phone" name="phone" placeholder="ex) 010-0000-0000" inputmode="tel">
+            <p class="field-error" id="err-phone">휴대폰 번호를 입력해 주세요.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email"><span class="num">7.</span>이메일 주소<span class="req">*</span></label>
+            <input class="form-control" type="email" id="email" name="email" placeholder="ex) abc@email.com" autocomplete="email">
+            <p class="form-hint">※ 설문조사 링크 및 입장 QR이 해당 이메일로 발송됩니다.</p>
+            <p class="field-error" id="err-email">올바른 이메일 주소를 입력해 주세요.</p>
+          </div>
+
+          <div class="form-group">
+            <p class="form-label"><span class="num">8.</span>포럼참가신청<span class="req">*</span></p>
+            <div class="radio-stack forum-apply-options">
+              <label class="radio-item forum-apply-option">
+                <input type="radio" name="forumApply" value="forum915">
+                9월15일(화) 사회서비스 정책포럼 : 사회서비스 정책 20년, 회고와 전망(15:00-17:00)
+              </label>
+              <label class="radio-item forum-apply-option">
+                <input type="radio" name="forumApply" value="forum916">
+                9월16일(수) 한국사회보장정보원 특별세션 : 사회서비스 전자바우처 제도 도입 20년, 성과와 발전방향(14:00-16:00)
+              </label>
+              <label class="radio-item"><input type="radio" name="forumApply" value="both"> 둘다 신청</label>
+              <label class="radio-item"><input type="radio" name="forumApply" value="none"> 신청 안함</label>
+            </div>
+            <p class="field-error" id="err-forumApply">포럼 참가 신청 여부를 선택해 주세요.</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password"><span class="num">9.</span>사전등록 확인용 비밀번호<span class="req">*</span></label>
+            <input class="form-control" type="password" id="password" name="password" autocomplete="new-password">
+            <p class="field-error" id="err-password">비밀번호를 4자 이상 입력해 주세요.</p>
+            <label class="form-label form-label--follow" for="passwordConfirm">비밀번호 확인<span class="req">*</span></label>
+            <input class="form-control" type="password" id="passwordConfirm" name="passwordConfirm" autocomplete="new-password">
+            <p class="field-error" id="err-passwordConfirm">비밀번호가 일치하지 않습니다.</p>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary" type="submit">신청하기</button>
+            <a class="btn btn-outline" href="index.html">돌아가기</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/common.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>
