@@ -88,20 +88,29 @@
           </div>
 
           <div class="form-group">
-            <p class="form-label"><span class="num">8.</span>포럼참가신청<span class="req">*</span></p>
-            <div class="radio-stack forum-apply-options">
-              <label class="radio-item forum-apply-option">
-                <input type="radio" name="forumApply" value="forum915">
+            <p class="form-label form-label--inline">
+              <span><span class="num">8.</span>포럼참가신청<span class="req">*</span></span>
+              <span class="form-label-note">중복신청 가능</span>
+            </p>
+            <div class="checkbox-stack forum-apply-options">
+              <label class="checkbox-item forum-apply-option">
+                <input type="checkbox" name="forumApply" value="forum915">
                 9월15일(화) 사회서비스 정책포럼 : 사회서비스 정책 20년, 회고와 전망(15:00-17:00)
               </label>
-              <label class="radio-item forum-apply-option">
-                <input type="radio" name="forumApply" value="forum916">
+              <label class="checkbox-item forum-apply-option">
+                <input type="checkbox" name="forumApply" value="forum916">
                 9월16일(수) 한국사회보장정보원 특별세션 : 사회서비스 전자바우처 제도 도입 20년, 성과와 발전방향(14:00-16:00)
               </label>
-              <label class="radio-item"><input type="radio" name="forumApply" value="both"> 둘다 신청</label>
-              <label class="radio-item"><input type="radio" name="forumApply" value="none"> 신청 안함</label>
+              <label class="checkbox-item forum-apply-option">
+                <input type="checkbox" name="forumApply" value="forum916talk">
+                9월16일(수) 토론회 : 돌봄인력 양성체계의 현황과 과제(10:00-12:00)
+              </label>
+              <label class="checkbox-item forum-apply-none">
+                <input type="checkbox" id="forumApplyNone" name="forumApplyNone" value="none">
+                신청 안함
+              </label>
             </div>
-            <p class="field-error" id="err-forumApply">포럼 참가 신청 여부를 선택해 주세요.</p>
+            <p class="field-error" id="err-forumApply">포럼 참가 신청 항목을 선택해 주세요.</p>
           </div>
 
           <div class="form-group">

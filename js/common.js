@@ -133,9 +133,30 @@
     if (isHome) root.classList.add('is-home');
   }
 
-  /* ===== Registration storage ===== */
   window.KSSE = window.KSSE || {};
 
+  window.KSSE.FORUM_APPLY_LABELS = {
+    forum915:
+      '9월15일(화) 사회서비스 정책포럼 : 사회서비스 정책 20년, 회고와 전망(15:00-17:00)',
+    forum916:
+      '9월16일(수) 한국사회보장정보원 특별세션 : 사회서비스 전자바우처 제도 도입 20년, 성과와 발전방향(14:00-16:00)',
+    forum916talk:
+      '9월16일(수) 토론회 : 돌봄인력 양성체계의 현황과 과제(10:00-12:00)',
+    none: '신청 안함',
+  };
+
+  window.KSSE.formatForumApplyLabel = function (forumApply, forumApplyLabel) {
+    if (forumApplyLabel) return forumApplyLabel;
+    if (!forumApply || forumApply === 'none') return window.KSSE.FORUM_APPLY_LABELS.none;
+    const map = window.KSSE.FORUM_APPLY_LABELS;
+    return String(forumApply)
+      .split(',')
+      .map((id) => map[id.trim()] || id.trim())
+      .filter(Boolean)
+      .join('\n');
+  };
+
+  /* ===== Registration storage ===== */
   const REG_KEY = 'ksse_registrations';
   const REGISTRATION_API = 'api/registrations.php';
 

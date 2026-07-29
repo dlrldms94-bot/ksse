@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const otherRadio = form.querySelector('input[name="orgType"][value="기타"]');
   const otherInput = document.getElementById('org-other');
   const orgTypeRadios = form.querySelectorAll('input[name="orgType"]');
+  const forumChecks = form.querySelectorAll('input[name="forumApply"]');
+  const forumNone = document.getElementById('forumApplyNone');
 
   orgTypeRadios.forEach((radio) => {
     radio.addEventListener('change', () => {
@@ -17,6 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
         otherInput.querySelector('input').value = '';
       }
     });
+  });
+
+  forumChecks.forEach((cb) => {
+    cb.addEventListener('change', () => {
+      if (cb.checked && forumNone) forumNone.checked = false;
+    });
+  });
+  forumNone?.addEventListener('change', () => {
+    if (forumNone.checked) {
+      forumChecks.forEach((cb) => {
+        cb.checked = false;
+      });
+    }
   });
 
   function showError(id, show) {
@@ -42,7 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const title = form.title.value.trim();
     const phone = form.phone.value.trim();
     const email = form.email.value.trim();
-    const forumApply = form.querySelector('input[name="forumApply"]:checked');
+    const selectedForums = [...form.querySelectorAll('input[name="forumApply"]:checked')];
+    const noneSelected = forumNone?.checked;
     const password = form.password.value;
     const passwordConfirm = form.passwordConfirm.value;
 
@@ -60,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
       valid = false;
     } else showError('err-email', false);
 
-    if (!forumApply) {
+    if (!noneSelected && selectedForums.length === 0) {
       showError('err-forumApply', true);
       valid = false;
     } else {
@@ -88,16 +104,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `기타(${form.orgOther.value.trim()})`
         : orgType.value;
 
-    const FORUM_APPLY_LABELS = {
-      forum915:
-        '9월15일(화) 사회서비스 정책포럼 : 사회서비스 정책 20년, 회고와 전망(15:00-17:00)',
-      forum916:
-        '9월16일(수) 한국사회보장정보원 특별세션 : 사회서비스 전자바우처 제도 도입 20년, 성과와 발전방향(14:00-16:00)',
-      both: '둘다 신청',
-      none: '신청 안함',
-    };
+    const labels = window.KSSE.FORUM_APPLY_LABELS;
+    let forumApply;
+    let forumApplyLabel;
 
-    const forumApplyLabel = FORUM_APPLY_LABELS[forumApply.value] || forumApply.value;
+    if (noneSelected) {
+      forumApply = 'none';
+      forumApplyLabel = labels.none;
+    } else {
+      const ids = selectedForums.map((el) => el.value);
+      forumApply = ids.join(',');
+      forumApplyLabel = ids.map((id) => labels[id] || id).join('\n');
+    }
 
     try {
       await window.KSSE.saveRegistration({
@@ -107,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         title,
         phone,
         email,
-        forumApply: forumApply.value,
+        forumApply,
         forumApplyLabel,
         password,
       });

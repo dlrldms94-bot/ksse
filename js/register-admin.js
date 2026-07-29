@@ -78,7 +78,9 @@
         <td class="reg-col-title">${escapeHtml(r.org)}<br><span class="reg-sub">${escapeHtml(r.orgType)} · ${escapeHtml(r.title)}</span></td>
         <td>${escapeHtml(r.phone)}</td>
         <td>${escapeHtml(r.email)}</td>
-        <td class="reg-col-forum">${escapeHtml(r.forumApplyLabel || r.forumApply || '-')}</td>
+        <td class="reg-col-forum">${escapeHtml(
+          (r.forumApplyLabel || window.KSSE.formatForumApplyLabel(r.forumApply, '')).replace(/\n/g, ' / ')
+        )}</td>
       </tr>`
       )
       .join('');

@@ -22,6 +22,35 @@
   color: var(--text-muted);
   margin-top: 8px;
 }
+.checkbox-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.checkbox-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.checkbox-item input { accent-color: var(--blue); width: 16px; height: 16px; flex-shrink: 0; }
+.form-label--inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 16px;
+}
+.form-label-note {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.forum-apply-none {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
 .forum-apply-options {
   gap: 12px;
 }
@@ -32,7 +61,6 @@
 }
 .forum-apply-option input {
   margin-top: 4px;
-  flex-shrink: 0;
 }
 .form-control {
   width: 100%;

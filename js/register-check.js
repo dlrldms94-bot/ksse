@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const created = new Date(found.createdAt).toLocaleString('ko-KR');
+    const forumText = window.KSSE.formatForumApplyLabel(found.forumApply, found.forumApplyLabel);
+    const forumHtml = escapeHtml(forumText).replace(/\n/g, '<br>');
     result.innerHTML = `
       <h3>사전등록이 확인되었습니다.</h3>
       <div class="info-list">
@@ -34,17 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="info-row"><span class="info-label">직함/직책</span><div class="info-value">${escapeHtml(found.title)}</div></div>
         <div class="info-row"><span class="info-label">휴대폰</span><div class="info-value">${escapeHtml(found.phone)}</div></div>
         <div class="info-row"><span class="info-label">이메일</span><div class="info-value">${escapeHtml(found.email)}</div></div>
-        <div class="info-row"><span class="info-label">포럼참가</span><div class="info-value">${escapeHtml(
-      found.forumApplyLabel ||
-        ({
-          forum915:
-            '9월15일(화) 사회서비스 정책포럼 : 사회서비스 정책 20년, 회고와 전망(15:00-17:00)',
-          forum916:
-            '9월16일(수) 한국사회보장정보원 특별세션 : 사회서비스 전자바우처 제도 도입 20년, 성과와 발전방향(14:00-16:00)',
-          both: '둘다 신청',
-          none: '신청 안함',
-        }[found.forumApply] || '-')
-    )}</div></div>
+        <div class="info-row"><span class="info-label">포럼참가</span><div class="info-value">${forumHtml}</div></div>
         <div class="info-row"><span class="info-label">신청일시</span><div class="info-value">${escapeHtml(created)}</div></div>
       </div>
       <p class="form-hint check-result-hint">전시 개막 3일 전 등록하신 이메일로 QR코드가 발송됩니다.</p>
