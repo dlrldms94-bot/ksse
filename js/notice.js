@@ -4,26 +4,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const paginationEl = document.getElementById('notice-pagination');
   const viewRoot = document.getElementById('notice-view');
 
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
   if (viewRoot) {
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
-    const notice = window.KSSE.getNotice(id);
-    if (!notice) {
-      viewRoot.innerHTML = `
-        <h2 class="section-title"><span class="dot"></span>공지사항</h2>
-        <p class="notice-empty">존재하지 않는 게시글입니다.</p>
-        <div class="btn-group"><a class="btn btn-outline" href="notice.html">목록으로</a></div>`;
-      return;
-    }
-    viewRoot.innerHTML = `
-      <h2 class="section-title"><span class="dot"></span>공지사항</h2>
-      <h3 class="notice-view-title">${escapeHtml(notice.title)}</h3>
-      <div class="notice-view-meta">
-        <span>번호 ${notice.id}</span>
-        <span>${escapeHtml(notice.date)}</span>
-      </div>
-      <div class="notice-view-body">${window.KSSE.renderNoticeBlocks(notice)}</div>
-      <div class="btn-group"><a class="btn btn-outline" href="notice.html">목록으로</a></div>`;
+    window.KSSE.fetchNotice(id)
+      .then((notice) => {
+        if (!notice) {
+          viewRoot.innerHTML = `
+            <h2 class="section-title"><span class="dot"></span>공지사항</h2>
+            <p class="notice-empty">존재하지 않는 게시글입니다.</p>
+            <div class="btn-group"><a class="btn btn-outline" href="notice.html">목록으로</a></div>`;
+          return;
+        }
+        viewRoot.innerHTML = `
+          <h2 class="section-title"><span class="dot"></span>공지사항</h2>
+          <h3 class="notice-view-title">${escapeHtml(notice.title)}</h3>
+          <div class="notice-view-meta">
+            <span>번호 ${notice.id}</span>
+            <span>${escapeHtml(notice.date)}</span>
+          </div>
+          <div class="notice-view-body">${window.KSSE.renderNoticeBlocks(notice)}</div>
+          <div class="btn-group"><a class="btn btn-outline" href="notice.html">목록으로</a></div>`;
+      })
+      .catch(() => {
+        viewRoot.innerHTML = `
+          <h2 class="section-title"><span class="dot"></span>공지사항</h2>
+          <p class="notice-empty">게시글을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+          <div class="btn-group"><a class="btn btn-outline" href="notice.html">목록으로</a></div>`;
+      });
     return;
   }
 
@@ -31,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const PER_PAGE = 10;
   let page = 1;
-  const notices = window.KSSE.getNotices().slice().sort((a, b) => b.id - a.id);
+  let notices = [];
 
   function render() {
     const total = notices.length;
@@ -77,13 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  render();
+  window.KSSE.fetchNotices()
+    .then((list) => {
+      notices = list.slice().sort((a, b) => b.id - a.id);
+      render();
+    })
+    .catch(() => {
+      listEl.innerHTML =
+        '<tr><td colspan="3" class="notice-empty">공지사항을 불러오지 못했습니다. 서버가 실행 중인지 확인해 주세요.</td></tr>';
+      if (emptyEl) emptyEl.style.display = 'none';
+      if (paginationEl) paginationEl.innerHTML = '';
+    });
 });

@@ -1,6 +1,5 @@
 (function () {
-  const ADMIN_SESSION_KEY = 'ksse_admin_session';
-  const ADMIN_PASSWORD = 'ksse2026';
+  const ADMIN_SESSION_KEY = 'ksse_notice_admin_session';
   const MAX_IMAGE_BYTES = 3 * 1024 * 1024;
   const MAX_FILE_BYTES = 5 * 1024 * 1024;
 
@@ -18,20 +17,34 @@
   if (!gate || !app) return;
 
   let blocks = [];
+  let noticesCache = [];
 
   function isAuthed() {
-    return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
+    return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1' && !!window.KSSE.getAdminToken();
   }
 
   function setAuthed(on) {
     if (on) sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
-    else sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    else {
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      window.KSSE.adminLogout();
+    }
   }
 
   function showApp(on) {
     gate.hidden = on;
     app.hidden = !on;
     if (on) renderAdminList();
+  }
+
+  function handleAdminError(error) {
+    if (error && error.status === 401) {
+      setAuthed(false);
+      showApp(false);
+      document.getElementById('err-login')?.classList.add('is-visible');
+      return true;
+    }
+    return false;
   }
 
   function todayISO() {
@@ -49,17 +62,12 @@
       .replace(/"/g, '&quot;');
   }
 
-  function readFileAsDataUrl(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = () => reject(new Error('read failed'));
-      reader.readAsDataURL(file);
-    });
-  }
-
   function blockLabel(type) {
     return { text: '텍스트', image: '이미지', file: '문서', youtube: '유튜브' }[type] || type;
+  }
+
+  function blockPreviewSrc(block) {
+    return block.url || block.dataUrl || '';
   }
 
   function renderBlocksEditor() {
@@ -71,12 +79,13 @@
         if (block.type === 'text') {
           body = `<textarea class="block-textarea" data-field="body" rows="5">${escapeHtml(block.body || '')}</textarea>`;
         } else if (block.type === 'image') {
+          const src = blockPreviewSrc(block);
           body = `
             <div class="block-file-row">
               <input type="file" accept="image/*" data-field="file">
               <span class="block-file-name">${escapeHtml(block.name || '파일을 선택하세요')}</span>
             </div>
-            ${block.dataUrl ? `<img class="block-preview-img" src="${block.dataUrl}" alt="">` : ''}`;
+            ${src ? `<img class="block-preview-img" src="${src}" alt="">` : ''}`;
         } else if (block.type === 'file') {
           body = `
             <div class="block-file-row">
@@ -136,12 +145,19 @@
           return;
         }
         try {
-          blocks[index].dataUrl = await readFileAsDataUrl(file);
-          blocks[index].name = file.name;
-          blocks[index].mime = file.type;
+          const uploaded = await window.KSSE.adminUploadNoticeFile(
+            file,
+            blocks[index].type === 'image' ? 'image' : 'file'
+          );
+          blocks[index].url = uploaded.url;
+          blocks[index].name = uploaded.name || file.name;
+          blocks[index].mime = uploaded.mime || file.type;
+          delete blocks[index].dataUrl;
           renderBlocksEditor();
-        } catch {
-          alert('파일을 불러오지 못했습니다.');
+        } catch (error) {
+          if (handleAdminError(error)) return;
+          alert(error.message || '파일 업로드에 실패했습니다.');
+          fileInput.value = '';
         }
       });
     });
@@ -149,8 +165,8 @@
 
   function addBlock(type) {
     if (type === 'text') blocks.push({ type: 'text', body: '' });
-    else if (type === 'image') blocks.push({ type: 'image', name: '', dataUrl: '' });
-    else if (type === 'file') blocks.push({ type: 'file', name: '', dataUrl: '', mime: '' });
+    else if (type === 'image') blocks.push({ type: 'image', name: '', url: '' });
+    else if (type === 'file') blocks.push({ type: 'file', name: '', url: '', mime: '' });
     else if (type === 'youtube') blocks.push({ type: 'youtube', url: '' });
     renderBlocksEditor();
   }
@@ -183,15 +199,25 @@
     blocksRoot.innerHTML = '';
   }
 
-  function renderAdminList() {
-    const notices = window.KSSE.getNotices().slice().sort((a, b) => b.id - a.id);
-    if (!notices.length) {
-      listBody.innerHTML = '';
+  async function renderAdminList() {
+    listBody.innerHTML = '';
+    listEmpty.hidden = true;
+    try {
+      const json = await window.KSSE.adminNoticeRequest('/api/admin/notices');
+      noticesCache = json.notices || [];
+    } catch (error) {
+      if (handleAdminError(error)) return;
+      listBody.innerHTML =
+        '<tr><td colspan="4" class="notice-empty">공지 목록을 불러오지 못했습니다.</td></tr>';
+      return;
+    }
+
+    if (!noticesCache.length) {
       listEmpty.hidden = false;
       return;
     }
-    listEmpty.hidden = true;
-    listBody.innerHTML = notices
+
+    listBody.innerHTML = noticesCache
       .map(
         (n) => `
       <tr>
@@ -210,15 +236,23 @@
 
     listBody.querySelectorAll('[data-edit]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        const notice = window.KSSE.getNotice(btn.dataset.edit);
+        const notice = noticesCache.find((n) => String(n.id) === String(btn.dataset.edit));
         if (notice) openEditor(notice);
       });
     });
     listBody.querySelectorAll('[data-delete]').forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         if (!confirm('이 공지를 삭제할까요?')) return;
-        window.KSSE.deleteNotice(btn.dataset.delete);
-        renderAdminList();
+        try {
+          await window.KSSE.adminNoticeRequest(`/api/admin/notices/${encodeURIComponent(btn.dataset.delete)}`, {
+            method: 'DELETE',
+          });
+          renderAdminList();
+        } catch (error) {
+          if (!handleAdminError(error)) {
+            alert(error.message || '삭제에 실패했습니다.');
+          }
+        }
       });
     });
   }
@@ -231,25 +265,43 @@
       const urlInput = el.querySelector('[data-field="url"]');
       if (urlInput) blocks[index].url = urlInput.value.trim();
     });
-    return blocks.filter((b) => {
-      if (b.type === 'text') return (b.body || '').trim().length > 0;
-      if (b.type === 'image' || b.type === 'file') return !!b.dataUrl;
-      if (b.type === 'youtube') return !!window.KSSE.parseYoutubeId(b.url);
-      return false;
-    });
+    return blocks
+      .map((b) => {
+        if (b.type === 'youtube') {
+          return {
+            type: 'youtube',
+            url: b.url,
+            videoId: window.KSSE.parseYoutubeId(b.url),
+          };
+        }
+        if (b.type === 'image') {
+          return { type: 'image', name: b.name, url: b.url || b.dataUrl || '' };
+        }
+        if (b.type === 'file') {
+          return { type: 'file', name: b.name, url: b.url || b.dataUrl || '', mime: b.mime || '' };
+        }
+        return { type: 'text', body: b.body };
+      })
+      .filter((b) => {
+        if (b.type === 'text') return (b.body || '').trim().length > 0;
+        if (b.type === 'image' || b.type === 'file') return !!(b.url && !String(b.url).startsWith('data:'));
+        if (b.type === 'youtube') return !!window.KSSE.parseYoutubeId(b.url);
+        return false;
+      });
   }
 
-  loginForm?.addEventListener('submit', (e) => {
+  loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const pw = loginForm.password.value;
     const err = document.getElementById('err-login');
-    if (pw !== ADMIN_PASSWORD) {
+    try {
+      await window.KSSE.adminLogin(pw);
+      err?.classList.remove('is-visible');
+      setAuthed(true);
+      showApp(true);
+    } catch {
       err?.classList.add('is-visible');
-      return;
     }
-    err?.classList.remove('is-visible');
-    setAuthed(true);
-    showApp(true);
   });
 
   document.getElementById('btn-logout')?.addEventListener('click', () => {
@@ -265,7 +317,7 @@
     btn.addEventListener('click', () => addBlock(btn.dataset.addBlock));
   });
 
-  noticeForm?.addEventListener('submit', (e) => {
+  noticeForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('notice-title').value.trim();
     const date = document.getElementById('notice-date').value;
@@ -280,32 +332,28 @@
     }
     errBlocks?.classList.remove('is-visible');
 
-    const payload = {
-      id: idRaw ? Number(idRaw) : window.KSSE.nextNoticeId(),
-      title,
-      date,
-      blocks: savedBlocks.map((b) => {
-        if (b.type === 'youtube') {
-          return {
-            type: 'youtube',
-            url: b.url,
-            videoId: window.KSSE.parseYoutubeId(b.url),
-          };
-        }
-        if (b.type === 'image') {
-          return { type: 'image', name: b.name, dataUrl: b.dataUrl };
-        }
-        if (b.type === 'file') {
-          return { type: 'file', name: b.name, dataUrl: b.dataUrl, mime: b.mime || '' };
-        }
-        return { type: 'text', body: b.body };
-      }),
-    };
+    const payload = { title, date, blocks: savedBlocks };
 
-    window.KSSE.upsertNotice(payload);
-    closeEditor();
-    renderAdminList();
-    alert('저장되었습니다.');
+    try {
+      if (idRaw) {
+        await window.KSSE.adminNoticeRequest(`/api/admin/notices/${encodeURIComponent(idRaw)}`, {
+          method: 'PUT',
+          body: payload,
+        });
+      } else {
+        await window.KSSE.adminNoticeRequest('/api/admin/notices', {
+          method: 'POST',
+          body: payload,
+        });
+      }
+      closeEditor();
+      await renderAdminList();
+      alert('저장되었습니다.');
+    } catch (error) {
+      if (!handleAdminError(error)) {
+        alert(error.message || '저장에 실패했습니다.');
+      }
+    }
   });
 
   if (isAuthed()) showApp(true);

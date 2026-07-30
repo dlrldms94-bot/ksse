@@ -26,25 +26,20 @@
     return '';
   };
 
-  KSSE.getNoticeBlocks = function (notice) {
-    if (!notice) return [];
-    if (Array.isArray(notice.blocks) && notice.blocks.length) return notice.blocks;
-    if (notice.content) return [{ type: 'text', body: notice.content }];
-    return [];
-  };
-
   KSSE.renderNoticeBlocks = function (notice) {
-    return KSSE.getNoticeBlocks(notice)
+    const blocks = KSSE.getNoticeBlocks ? KSSE.getNoticeBlocks(notice) : [];
+    return blocks
       .map((block) => {
         if (block.type === 'text') {
           const body = escapeHtml(block.body || '').replace(/\n/g, '<br>');
           return `<div class="notice-block notice-block-text">${body}</div>`;
         }
-        if (block.type === 'image' && block.dataUrl) {
-          return `<figure class="notice-block notice-block-image"><img src="${block.dataUrl}" alt="${escapeHtml(block.name || '첨부 이미지')}"></figure>`;
+        const fileSrc = block.url || block.dataUrl;
+        if (block.type === 'image' && fileSrc) {
+          return `<figure class="notice-block notice-block-image"><img src="${fileSrc}" alt="${escapeHtml(block.name || '첨부 이미지')}"></figure>`;
         }
-        if (block.type === 'file' && block.dataUrl) {
-          return `<p class="notice-block notice-block-file"><a class="notice-file-link" href="${block.dataUrl}" download="${escapeHtml(block.name || 'download')}">${escapeHtml(block.name || '첨부 파일')}</a></p>`;
+        if (block.type === 'file' && fileSrc) {
+          return `<p class="notice-block notice-block-file"><a class="notice-file-link" href="${fileSrc}" download="${escapeHtml(block.name || 'download')}">${escapeHtml(block.name || '첨부 파일')}</a></p>`;
         }
         if (block.type === 'youtube') {
           const videoId = block.videoId || KSSE.parseYoutubeId(block.url);

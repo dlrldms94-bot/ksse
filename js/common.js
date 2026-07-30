@@ -243,67 +243,85 @@
     return json.registrations || [];
   };
 
-  /* ===== Notice board storage ===== */
-  const NOTICE_KEY = 'ksse_notices';
-  const DEFAULT_NOTICES = [
-    {
-      id: 1,
-      title: '2026 대한민국 사회서비스 박람회 사전등록 안내',
-      date: '2026-07-01',
-      content:
-        '안녕하세요.\n2026 대한민국 사회서비스 박람회 사전등록이 시작되었습니다.\n\n■ 사전등록 기간: 2026. 7. 1. ~ 2026. 9. 10.\n■ 행사 일정: 2026. 9. 15.(화) ~ 9. 16.(수)\n■ 장소: aT센터 제2전시장(3층)\n\n홈페이지 사전등록 메뉴에서 신청해 주시기 바랍니다.\n개막 3일 전 QR코드가 등록하신 이메일로 발송됩니다.',
-    },
-    {
-      id: 2,
-      title: '박람회 관람 일정 및 입장 안내',
-      date: '2026-07-10',
-      content:
-        '관람객 여러분께 안내드립니다.\n\n■ 1일차 (9.15.화): 13:30 ~ 17:00\n■ 2일차 (9.16.수): 10:00 ~ 17:00\n\n사전등록 후 발송되는 QR코드를 현장에서 제시해 주시면 입장이 가능합니다.\n문의: office@onandme.com / 02-1234-5678',
-    },
-    {
-      id: 3,
-      title: '부대행사(정책포럼·특별세션) 참석 안내',
-      date: '2026-07-20',
-      content:
-        '프로그램 중 부대행사로 사회서비스 정책포럼과 특별세션이 진행됩니다.\n자세한 내용은 프로그램 > 부대행사 메뉴를 확인해 주세요.\n\n※ 좌석이 한정되어 있으니 관심 있는 분들은 미리 일정을 확인해 주시기 바랍니다.',
-    },
-  ];
+  /* ===== Notice board (server API) ===== */
+  const NOTICE_API = '/api/notices';
+  const ADMIN_TOKEN_KEY = 'ksse_admin_token';
 
-  window.KSSE.getNotices = function () {
-    try {
-      const saved = localStorage.getItem(NOTICE_KEY);
-      if (saved) return JSON.parse(saved);
-    } catch {
-      /* ignore */
+  async function parseJsonResponse(res) {
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const error = new Error(json.message || json.error || 'request_failed');
+      error.status = res.status;
+      throw error;
     }
-    localStorage.setItem(NOTICE_KEY, JSON.stringify(DEFAULT_NOTICES));
-    return [...DEFAULT_NOTICES];
+    return json;
+  }
+
+  window.KSSE.adminLogin = async function (password) {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    const json = await parseJsonResponse(res);
+    if (json.token) {
+      sessionStorage.setItem(ADMIN_TOKEN_KEY, json.token);
+    }
+    return json;
   };
 
-  window.KSSE.getNotice = function (id) {
-    return this.getNotices().find((n) => String(n.id) === String(id));
+  window.KSSE.adminLogout = function () {
+    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
   };
 
-  window.KSSE.saveNotices = function (list) {
-    localStorage.setItem(NOTICE_KEY, JSON.stringify(list));
+  window.KSSE.getAdminToken = function () {
+    return sessionStorage.getItem(ADMIN_TOKEN_KEY) || '';
   };
 
-  window.KSSE.nextNoticeId = function () {
-    return this.getNotices().reduce((max, n) => Math.max(max, n.id), 0) + 1;
+  window.KSSE.adminNoticeRequest = async function (path, options = {}) {
+    const token = this.getAdminToken();
+    const res = await fetch(path, {
+      method: options.method || 'GET',
+      headers: {
+        ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+        Authorization: `Bearer ${token}`,
+        ...(options.headers || {}),
+      },
+      body: options.body ? JSON.stringify(options.body) : undefined,
+    });
+    return parseJsonResponse(res);
   };
 
-  window.KSSE.upsertNotice = function (notice) {
-    const list = this.getNotices();
-    const idx = list.findIndex((n) => n.id === notice.id);
-    if (idx >= 0) list[idx] = notice;
-    else list.push(notice);
-    this.saveNotices(list);
-    return notice;
+  window.KSSE.adminUploadNoticeFile = async function (file, kind) {
+    const token = this.getAdminToken();
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('kind', kind);
+    const res = await fetch('/api/admin/notices/upload', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+    return parseJsonResponse(res);
   };
 
-  window.KSSE.deleteNotice = function (id) {
-    const next = this.getNotices().filter((n) => String(n.id) !== String(id));
-    this.saveNotices(next);
+  window.KSSE.fetchNotices = async function () {
+    const res = await fetch(NOTICE_API);
+    const json = await parseJsonResponse(res);
+    return json.notices || [];
+  };
+
+  window.KSSE.fetchNotice = async function (id) {
+    const res = await fetch(`${NOTICE_API}/${encodeURIComponent(id)}`);
+    const json = await parseJsonResponse(res);
+    return json.notice || null;
+  };
+
+  window.KSSE.getNoticeBlocks = function (notice) {
+    if (!notice) return [];
+    if (Array.isArray(notice.blocks) && notice.blocks.length) return notice.blocks;
+    if (notice.content) return [{ type: 'text', body: notice.content }];
+    return [];
   };
 
   document.addEventListener('DOMContentLoaded', mountLayout);
