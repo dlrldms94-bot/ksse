@@ -38,24 +38,16 @@
   justify-content: center;
 }
 
-.overview-card .section-title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 28px;
-  color: var(--blue);
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.overview-card .overview-intro {
   margin-bottom: 28px;
-  border: 0;
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.2;
+  color: var(--blue);
+  font-weight: 600;
 }
 
-.overview-card .section-title .dot {
-  width: 12px;
-  height: 12px;
-  background: var(--blue);
-  border-radius: 50%;
-  flex-shrink: 0;
+.overview-card .overview-intro p + p {
+  margin-top: 12px;
 }
 
 .overview-card .info-list {
@@ -109,6 +101,6 @@
     min-height: 0;
   }
   .overview-card .overview-info { padding: 28px 20px; }
-  .overview-card .section-title { font-size: 22px; }
+  .overview-card .overview-intro { font-size: 15px; }
   .overview-card .info-row { grid-template-columns: 90px 1fr; }
 }
