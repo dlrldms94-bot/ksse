@@ -74,15 +74,61 @@
   height: var(--schedule-unit-h);
 }
 .schedule-table thead th {
-  vertical-align: bottom;
+  vertical-align: middle;
   padding: 0;
   border: none;
   font-weight: 700;
   text-align: center;
 }
-.schedule-table thead th.col-time {
+.schedule-table thead th.col-corner {
   width: var(--schedule-time-w);
-  vertical-align: bottom;
+  position: relative;
+  box-sizing: border-box;
+  min-height: 96px;
+  background: #eef1f5;
+  border: 1px solid #d8dee6;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.schedule-table thead th.col-corner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 0.5px),
+    #b8c0cc calc(50% - 0.5px),
+    #b8c0cc calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+  pointer-events: none;
+}
+.corner-loc,
+.corner-time {
+  position: absolute;
+  font-size: 15px;
+  font-weight: 700;
+  color: #444;
+  line-height: 1.2;
+}
+.corner-loc {
+  top: 14px;
+  right: 14px;
+}
+.corner-time {
+  bottom: 14px;
+  left: 14px;
+}
+.schedule-head-row--loc .schedule-loc-head {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 10px 12px;
+  background: #eef1f5;
+  border: 1px solid #d8dee6;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
 }
 .schedule-table thead th.col-main,
 .schedule-table thead th.col-booth,
@@ -91,32 +137,6 @@
 }
 .schedule-table tbody td.time-cell {
   width: var(--schedule-time-w);
-}
-.schedule-col-loc--spacer {
-  visibility: hidden;
-  pointer-events: none;
-}
-.schedule-table thead .col-time-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  min-height: 44px;
-  padding: 10px 12px;
-  background: var(--white);
-  border: 1px solid #d8dee6;
-  border-radius: 12px;
-  font-size: 17px;
-  font-weight: 700;
-  color: #444;
-}
-.schedule-col-loc {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  color: #666;
-  margin-bottom: 8px;
-  text-align: center;
 }
 .schedule-col-head {
   display: flex;
@@ -229,10 +249,20 @@
   min-height: 0;
 }
 
-.slot-empty {
+.slot-prep {
   background: #eef3f8;
-  color: #c0c8d0;
-  font-weight: 500;
+  color: #8899aa;
+  font-weight: 600;
+}
+.slot-time-note {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  opacity: 0.85;
+}
+.slot-time-note--inline {
+  font-size: 12px;
+  font-weight: 600;
 }
 .slot-main { background: var(--prog-slot-main); color: var(--prog-main); }
 .slot-booth { background: var(--prog-slot-booth); color: #2d6b38; }

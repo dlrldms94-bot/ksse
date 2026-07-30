@@ -71,3 +71,117 @@
   .process-flow { flex-direction: column; }
   .process-arrow { transform: rotate(90deg); }
 }
+
+.guide-lead {
+  margin: -8px 0 32px;
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.guide-subtitle {
+  margin-bottom: 16px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--blue);
+}
+
+.parking-status-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 36px;
+}
+
+.parking-status-table th,
+.parking-status-table td {
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  font-size: 18px;
+  text-align: center;
+}
+
+.parking-status-table th {
+  background: #f5f7fa;
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.parking-fee-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.parking-fee-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 24px;
+  background: var(--white);
+}
+
+.parking-fee-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 16px;
+  border-radius: 50%;
+  background: var(--blue-mid);
+  color: var(--white);
+}
+
+.parking-fee-card__icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.parking-fee-card__icon--day {
+  flex-direction: column;
+  gap: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.parking-fee-card__icon--day span:first-child {
+  font-size: 22px;
+}
+
+.parking-fee-card__icon-unit {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.parking-fee-card__title {
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.parking-fee-card__text {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.parking-fee-card__note {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .parking-fee-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,30 @@
+/* ===== 이벤트 (event.html) ===== */
+.event-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.event-gallery__item {
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--blue-soft);
+  background: var(--blue-pale);
+}
+
+.event-gallery__item img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  .event-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .event-gallery {
+    grid-template-columns: 1fr;
+  }
+}

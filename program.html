@@ -32,71 +32,105 @@
           <div class="schedule-wrap">
             <table class="schedule-table">
               <thead>
-                <tr>
-                  <th class="col-time">
-                    <span class="schedule-col-loc schedule-col-loc--spacer" aria-hidden="true">3층 전시관</span>
-                    <span class="col-time-label">시간</span>
+                <tr class="schedule-head-row schedule-head-row--loc">
+                  <th class="col-corner" rowspan="2" scope="colgroup">
+                    <span class="corner-loc">장소</span>
+                    <span class="corner-time">시간</span>
                   </th>
-                  <th class="col-main">
-                    <span class="schedule-col-loc">3층 전시관</span>
+                  <th class="schedule-loc-head" colspan="2" scope="colgroup">3층 전시장</th>
+                  <th class="schedule-loc-head" scope="colgroup">5층</th>
+                </tr>
+                <tr class="schedule-head-row schedule-head-row--venue">
+                  <th class="col-main" scope="col">
                     <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>메인무대</span>
                   </th>
-                  <th class="col-booth">
-                    <span class="schedule-col-loc">3층 전시관</span>
+                  <th class="col-booth" scope="col">
                     <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>홍보부스</span>
                   </th>
-                  <th class="col-grand">
-                    <span class="schedule-col-loc">5층</span>
+                  <th class="col-grand" scope="col">
                     <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>그랜드홀</span>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="7"><span class="time-range">10:00-13:30</span></td>
-                  <td class="is-stretch" rowspan="7"><div class="slot slot-empty">-</div></td>
-                  <td class="is-stretch" rowspan="7"><div class="slot slot-empty">-</div></td>
-                  <td class="is-stretch" rowspan="4"><div class="slot slot-grand">사회서비스원 대회</div></td>
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">10:00-11:00</span></td>
+                  <td class="is-stretch" rowspan="6"><div class="slot slot-prep">준비중</div></td>
+                  <td class="is-stretch" rowspan="6"><div class="slot slot-prep">준비중</div></td>
+                  <td class="is-stretch" rowspan="5">
+                    <div class="slot slot-grand">
+                      사회서비스원 성과대회
+                      <span class="slot-time-note">(10:00-12:30)</span>
+                    </div>
+                  </td>
                 </tr>
                 <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
                 <tr class="schedule-row">
-                  <td class="is-stretch" rowspan="3"><div class="slot slot-lunch">오찬</div></td>
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">11:00-12:00</span></td>
                 </tr>
                 <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
                 <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">13:30 - 14:30</span></td>
-                  <td class="is-stretch" rowspan="2"><div class="slot slot-main">개막식</div></td>
-                  <td class="is-stretch"><div class="slot slot-booth">오픈</div></td>
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">12:00-13:00</span></td>
+                </tr>
+                <tr class="schedule-row">
+                  <td class="is-stretch" rowspan="2"><div class="slot slot-lunch">오찬</div></td>
+                </tr>
+                <tr class="schedule-row">
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">13:00-14:00</span></td>
+                  <td class="is-stretch"><div class="slot slot-prep">준비중</div></td>
+                  <td class="is-stretch"><div class="slot slot-booth">부스 오픈</div></td>
+                </tr>
+                <tr class="schedule-row">
+                  <td class="is-stretch" rowspan="2">
+                    <div class="slot slot-main">
+                      개막식
+                      <span class="slot-time-note">(13:30-14:10)</span>
+                    </div>
+                  </td>
+                  <td class="is-stretch"><div class="slot slot-booth">(부스 운영)</div></td>
                   <td class="is-stretch" rowspan="7">
                     <div class="slot slot-grand slot-tall">
                       사회서비스원<br>통합 워크숍
                       <span class="slot-tag">1일차</span>
+                      <span class="slot-time-note">(13:30-17:00)</span>
                     </div>
                   </td>
                 </tr>
                 <tr class="schedule-row">
-                  <td class="is-stretch"><div class="slot slot-booth-dark slot--inline">부스탐방<span class="slot-num">1</span></div></td>
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">14:00-15:00</span></td>
+                  <td class="is-stretch">
+                    <div class="slot slot-booth-dark slot--inline">
+                      부스탐방<span class="slot-num">1</span>
+                      <span class="slot-time-note slot-time-note--inline">(14:10-14:30)</span>
+                    </div>
+                  </td>
                 </tr>
                 <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="4"><span class="time-range">14:30 - 16:30</span></td>
+                  <td class="is-stretch"><div class="slot slot-prep">준비중</div></td>
+                  <td class="is-stretch"><div class="slot slot-booth">(부스 운영)</div></td>
+                </tr>
+                <tr class="schedule-row">
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">15:00-16:00</span></td>
                   <td class="is-stretch" rowspan="4">
                     <div class="slot slot-main">
                       사회서비스 정책포럼
                       <span class="slot-badge">사회서비스 정책 20년, 회고와 전망</span>
+                      <span class="slot-time-note">(15:00-17:00)</span>
                     </div>
                   </td>
-                  <td class="is-stretch" rowspan="4"><div class="slot slot-booth">홍보 부스 운영</div></td>
+                  <td class="is-stretch" rowspan="3"><div class="slot slot-booth">(부스 운영)</div></td>
                 </tr>
                 <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
                 <tr class="schedule-row">
-                  <td class="time-cell is-stretch"><span class="time-range">16:30-17:00</span></td>
-                  <td class="is-stretch"><div class="slot slot-empty">-</div></td>
-                  <td class="is-stretch"><div class="slot slot-booth-dark slot--inline">부스탐방<span class="slot-num">2</span></div></td>
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">16:00-17:00</span></td>
+                </tr>
+                <tr class="schedule-row">
+                  <td class="is-stretch">
+                    <div class="slot slot-booth-dark slot--inline">
+                      부스탐방<span class="slot-num">2</span>
+                      <span class="slot-time-note slot-time-note--inline">(16:30-16:50)</span>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -109,74 +143,89 @@
           <div class="schedule-wrap">
             <table class="schedule-table">
               <thead>
-                <tr>
-                  <th class="col-time">
-                    <span class="schedule-col-loc schedule-col-loc--spacer" aria-hidden="true">3층 전시관</span>
-                    <span class="col-time-label">시간</span>
+                <tr class="schedule-head-row schedule-head-row--loc">
+                  <th class="col-corner" rowspan="2" scope="colgroup">
+                    <span class="corner-loc">장소</span>
+                    <span class="corner-time">시간</span>
                   </th>
-                  <th class="col-main">
-                    <span class="schedule-col-loc">3층 전시관</span>
+                  <th class="schedule-loc-head" colspan="2" scope="colgroup">3층 전시장</th>
+                  <th class="schedule-loc-head" scope="colgroup">5층</th>
+                </tr>
+                <tr class="schedule-head-row schedule-head-row--venue">
+                  <th class="col-main" scope="col">
                     <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>메인무대</span>
                   </th>
-                  <th class="col-booth">
-                    <span class="schedule-col-loc">3층 전시관</span>
+                  <th class="col-booth" scope="col">
                     <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>홍보부스</span>
                   </th>
-                  <th class="col-grand">
-                    <span class="schedule-col-loc">5층</span>
+                  <th class="col-grand" scope="col">
                     <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>그랜드홀</span>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="4"><span class="time-range">10:00-12:00</span></td>
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">10:00-11:00</span></td>
+                  <td class="is-stretch" rowspan="8"><div class="slot slot-prep">준비중</div></td>
+                  <td class="is-stretch" rowspan="6"><div class="slot slot-booth">(부스 운영)</div></td>
                   <td class="is-stretch" rowspan="4">
-                    <div class="slot slot-main">
-                      한국사회보장정보원 특별세션
-                      <span class="slot-badge">전자바우처 20년, 성과와 발전방향</span>
-                    </div>
-                  </td>
-                  <td class="is-stretch" rowspan="4"><div class="slot slot-booth">홍보 부스 운영</div></td>
-                  <td class="is-stretch" rowspan="4">
-                    <div class="slot slot-grand slot-tall">
-                      사회서비스원<br>통합 워크숍
-                      <span class="slot-tag">2일차</span>
+                    <div class="slot slot-grand">
+                      토론회 「돌봄인력 양성체계의 현황과 과제」
+                      <span class="slot-time-note">(10:00-12:00)</span>
                     </div>
                   </td>
                 </tr>
                 <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
+                <tr class="schedule-row">
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">11:00-12:00</span></td>
+                </tr>
                 <tr class="schedule-row"></tr>
                 <tr class="schedule-row">
                   <td class="time-cell is-stretch" rowspan="2"><span class="time-range">12:00-13:00</span></td>
-                  <td class="is-stretch" rowspan="2"><div class="slot slot-empty">-</div></td>
-                  <td class="is-stretch" rowspan="2"><div class="slot slot-empty">-</div></td>
-                  <td class="is-stretch" rowspan="2"><div class="slot slot-lunch">오찬</div></td>
+                  <td class="is-stretch" rowspan="3"><div class="slot slot-prep">준비중</div></td>
                 </tr>
                 <tr class="schedule-row"></tr>
                 <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="4"><span class="time-range">13:00-15:00</span></td>
-                  <td class="is-stretch" rowspan="4"><div class="slot slot-main">우수사례 발표</div></td>
-                  <td class="is-stretch" rowspan="4"><div class="slot slot-booth">홍보 부스 운영</div></td>
-                  <td class="is-stretch" rowspan="4"><div class="slot slot-grand">네트워킹 세션</div></td>
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">13:00-14:00</span></td>
+                  <td class="is-stretch">
+                    <div class="slot slot-booth-dark slot--inline">
+                      부스탐방<span class="slot-num">1</span>
+                      <span class="slot-time-note slot-time-note--inline">(13:00-13:30)</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="schedule-row">
+                  <td class="is-stretch" rowspan="3"><div class="slot slot-booth">(부스 운영)</div></td>
+                  <td class="is-stretch" rowspan="5">
+                    <div class="slot slot-grand slot-tall">
+                      사회서비스원<br>통합 워크숍
+                      <span class="slot-tag">2일차</span>
+                      <span class="slot-time-note">(13:30-16:00)</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="schedule-row">
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">14:00-15:00</span></td>
+                  <td class="is-stretch" rowspan="4">
+                    <div class="slot slot-main">
+                      한국사회보장정보원 특별세션
+                      <span class="slot-badge">사회서비스 전자바우처 제도 도입 20년,<br>성과와 발전방향</span>
+                      <span class="slot-time-note">(14:00-16:00)</span>
+                    </div>
+                  </td>
                 </tr>
                 <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
                 <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="3"><span class="time-range">15:00-16:30</span></td>
-                  <td class="is-stretch" rowspan="3"><div class="slot slot-main">폐막식·시상식</div></td>
-                  <td class="is-stretch" rowspan="3"><div class="slot slot-booth-dark">부스탐방</div></td>
-                  <td class="is-stretch" rowspan="3"><div class="slot slot-empty">-</div></td>
+                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">15:00-16:00</span></td>
+                  <td class="is-stretch">
+                    <div class="slot slot-booth-dark slot--inline">
+                      부스탐방<span class="slot-num">2</span>
+                      <span class="slot-time-note slot-time-note--inline">(15:00-15:30)</span>
+                    </div>
+                  </td>
                 </tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row"></tr>
                 <tr class="schedule-row">
-                  <td class="time-cell is-stretch"><span class="time-range">16:30-17:00</span></td>
-                  <td class="is-stretch"><div class="slot slot-empty">-</div></td>
-                  <td class="is-stretch"><div class="slot slot-booth">폐장</div></td>
-                  <td class="is-stretch"><div class="slot slot-empty">-</div></td>
+                  <td class="is-stretch"><div class="slot slot-booth">(부스 운영)</div></td>
                 </tr>
               </tbody>
             </table>

@@ -16,7 +16,7 @@
       children: [
         { label: '사전등록', href: 'register.html' },
         { label: '사전신청확인', href: 'register-check.html' },
-        { label: '참관 안내', href: 'guide.html' },
+        { label: '관람 안내', href: 'guide.html' },
       ],
     },
     {
@@ -73,8 +73,8 @@
               <a href="#">이용약관</a><span class="footer-dot">·</span>
               <a href="#">사이트맵</a>
             </div>
-            <div class="footer-address">서울특별시 강남구 테헤란로 92길 39</div>
-            <div class="footer-contact">TEL. 02-1234-5678 | E-mail. office@onandme.com</div>
+            <div class="footer-address">(04551) 서울특별시 중구 삼일대로 340, 9층</div>
+            <div class="footer-contact">TEL. 02-2271-9017 | E-mail. kssvcexpo@kcpass.or.kr</div>
             <div class="footer-copy">© 2026 대한민국 사회서비스 박람회. All rights reserved.</div>
           </div>
           <div class="footer-logos">

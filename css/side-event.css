@@ -1,6 +1,65 @@
 /* ===== 부대행사 (side-event.html) ===== */
-.note-text {
-  font-size: 16px;
-  color: var(--text-muted);
-  margin-top: 16px;
+.day-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.day-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 200px;
+  height: 52px;
+  padding: 0 32px;
+  border-radius: 999px;
+  border: 2px solid var(--blue);
+  background: var(--white);
+  transition: 0.2s;
+  cursor: pointer;
+}
+.day-tab-label {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--blue);
+}
+.day-tab-date {
+  font-size: 17px;
+  font-weight: 400;
+  color: #b8bcc4;
+}
+.day-tab.is-active {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.day-tab.is-active .day-tab-label,
+.day-tab.is-active .day-tab-date {
+  color: var(--white);
+  font-weight: 700;
+}
+.day-tab:not(.is-active):hover {
+  background: var(--blue-pale);
+}
+
+.side-event-day {
+  display: none;
+}
+.side-event-day.is-active {
+  display: block;
+}
+.side-event-day .content-card + .content-card {
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .day-tab {
+    min-width: 0;
+    flex: 1;
+    padding: 0 16px;
+    height: 48px;
+  }
+  .day-tab-label { font-size: 19px; }
+  .day-tab-date { font-size: 15px; }
 }
