@@ -65,9 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
       .map(
         (n, i) => `
       <tr data-id="${n.id}">
-        <td>${total - (start + i)}</td>
-        <td class="title">${escapeHtml(n.title)}</td>
-        <td>${escapeHtml(n.date)}</td>
+        <td class="notice-no">${total - (start + i)}</td>
+        <td class="notice-title">${escapeHtml(n.title)}</td>
+        <td class="notice-date">${escapeHtml(n.date)}</td>
       </tr>`
       )
       .join('');
