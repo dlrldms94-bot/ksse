@@ -12,19 +12,131 @@
   background: var(--blue-pale);
 }
 
+.event-gallery__trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  transition: opacity 0.15s;
+}
+
+.event-gallery__trigger:hover {
+  opacity: 0.92;
+}
+
 .event-gallery__item img {
   width: 100%;
   height: auto;
+  display: block;
+}
+
+.event-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.event-modal[hidden] {
+  display: none;
+}
+
+.event-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 30, 60, 0.75);
+}
+
+.event-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(960px, 100%);
+  max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+  overflow: auto;
+}
+
+.event-modal__img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 96px);
+  max-height: calc(100dvh - 96px);
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 6px;
+}
+
+.event-modal__close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--text);
+  font-size: 24px;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-modal__close:hover {
+  background: var(--blue-pale);
+  color: var(--blue);
 }
 
 @media (max-width: 900px) {
   .event-gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .event-gallery {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .event-modal {
+    padding: 12px;
+    align-items: center;
+  }
+
+  .event-modal__dialog {
+    width: 100%;
+    padding: 8px;
+    max-height: calc(100dvh - 24px);
+  }
+
+  .event-modal__img {
+    max-height: calc(100dvh - 72px);
+  }
+
+  .event-modal__close {
+    top: 6px;
+    right: 6px;
+    width: 40px;
+    height: 40px;
+    font-size: 26px;
   }
 }
 
 @media (max-width: 560px) {
-  .event-gallery {
-    grid-template-columns: 1fr;
+  .event-modal {
+    padding: 8px;
   }
 }

@@ -20,14 +20,25 @@
         <h1 class="section-title"><span class="dot"></span>이벤트</h1>
         <ul class="event-gallery">
           <li class="event-gallery__item">
-            <img src="img/event-1.jpg" alt="이벤트 1">
+            <button type="button" class="event-gallery__trigger" aria-label="이벤트 1 크게 보기">
+              <img src="img/event-1.jpg" alt="이벤트 1">
+            </button>
           </li>
         </ul>
       </div>
     </div>
   </main>
 
+  <div class="event-modal" id="event-modal" hidden aria-hidden="true">
+    <div class="event-modal__backdrop"></div>
+    <div class="event-modal__dialog" role="dialog" aria-modal="true" aria-label="이벤트 이미지">
+      <button type="button" class="event-modal__close" aria-label="닫기">&times;</button>
+      <img class="event-modal__img" id="event-modal-img" src="" alt="">
+    </div>
+  </div>
+
   <div id="site-footer"></div>
   <script src="js/common.js"></script>
+  <script src="js/event.js"></script>
 </body>
 </html>

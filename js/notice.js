@@ -12,6 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/"/g, '&quot;');
   }
 
+  function formatNoticeDate(dateStr) {
+    const m = String(dateStr || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return `${m[1]}.${m[2]}.${m[3]}`;
+    return dateStr || '';
+  }
+
   if (viewRoot) {
     const params = new URLSearchParams(location.search);
     const id = params.get('id');
@@ -29,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <h3 class="notice-view-title">${escapeHtml(notice.title)}</h3>
           <div class="notice-view-meta">
             <span>번호 ${notice.id}</span>
-            <span>${escapeHtml(notice.date)}</span>
+            <span>${escapeHtml(formatNoticeDate(notice.date))}</span>
           </div>
           <div class="notice-view-body">${window.KSSE.renderNoticeBlocks(notice)}</div>
           <div class="btn-group"><a class="btn btn-outline" href="notice.html">목록으로</a></div>`;
@@ -67,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <tr data-id="${n.id}">
         <td class="notice-no">${total - (start + i)}</td>
         <td class="notice-title">${escapeHtml(n.title)}</td>
-        <td class="notice-date">${escapeHtml(n.date)}</td>
+        <td class="notice-date">${escapeHtml(formatNoticeDate(n.date))}</td>
       </tr>`
       )
       .join('');

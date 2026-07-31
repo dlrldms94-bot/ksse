@@ -165,7 +165,10 @@
 
 @media (max-width: 768px) {
   .notice-board {
-    border-radius: 12px;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
   }
 
   .notice-table thead {
@@ -188,20 +191,24 @@
 
   .notice-table tbody tr {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr auto;
     grid-template-areas:
-      "title title"
-      "no date";
-    gap: 6px 12px;
-    padding: 16px 18px;
-    border-bottom: 1px solid var(--border);
+      "no date"
+      "title title";
+    gap: 10px 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+    border: 1px solid #d8dee6;
+    border-radius: 12px;
+    background: var(--white);
+    box-shadow: 0 1px 2px rgba(25, 95, 171, 0.04);
   }
 
   .notice-table tbody tr:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
   }
 
-  .notice-table tbody tr:hover {
+  .notice-table tbody tr:active {
     background: var(--blue-pale);
   }
 
@@ -217,31 +224,35 @@
     background: transparent;
   }
 
-  .notice-table tbody .notice-title {
-    grid-area: title;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.5;
-  }
-
   .notice-table tbody .notice-no {
     grid-area: no;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 400;
     color: var(--text-muted);
   }
 
   .notice-table tbody .notice-no::before {
     content: "번호 ";
-    color: var(--text-muted);
   }
 
   .notice-table tbody .notice-date {
     grid-area: date;
     justify-self: end;
     align-self: center;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-muted);
     white-space: nowrap;
+  }
+
+  .notice-table tbody .notice-title {
+    grid-area: title;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--blue);
+    line-height: 1.5;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   .notice-table tbody td[colspan] {
@@ -250,6 +261,10 @@
     text-align: center;
     font-size: 15px;
     color: var(--text-muted);
+    border: 1px solid #d8dee6;
+    border-radius: 12px;
+    background: var(--white);
+    margin-bottom: 0;
   }
 
   .notice-empty {
@@ -265,10 +280,11 @@
   }
 
   .notice-view-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    font-size: 13px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
   }
 
   .pagination {
