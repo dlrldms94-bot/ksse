@@ -34,6 +34,14 @@ function ensureUploadsDir() {
   if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
+/** multer가 multipart filename을 latin1로 읽을 때 한글 파일명 복원 */
+function resolveUploadFilename(originalname, displayName) {
+  const clientName = String(displayName || '').trim();
+  if (clientName) return clientName;
+  if (!originalname) return '';
+  return Buffer.from(originalname, 'latin1').toString('utf8');
+}
+
 function createAdminToken() {
   const expiresAt = Date.now() + SESSION_MS;
   const payload = Buffer.from(JSON.stringify({ exp: expiresAt }), 'utf8').toString('base64url');
@@ -216,7 +224,7 @@ app.post('/api/admin/notices/upload', requireAdmin, (req, res) => {
     res.status(201).json({
       ok: true,
       url: `/uploads/${req.file.filename}`,
-      name: req.file.originalname,
+      name: resolveUploadFilename(req.file.originalname, req.body?.displayName),
       mime: req.file.mimetype || '',
     });
   });

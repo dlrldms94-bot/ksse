@@ -297,6 +297,7 @@
     const formData = new FormData();
     formData.append('file', file);
     formData.append('kind', kind);
+    formData.append('displayName', file.name);
     const res = await fetch('/api/admin/notices/upload', {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },

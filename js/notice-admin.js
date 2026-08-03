@@ -150,7 +150,7 @@
             blocks[index].type === 'image' ? 'image' : 'file'
           );
           blocks[index].url = uploaded.url;
-          blocks[index].name = uploaded.name || file.name;
+          blocks[index].name = file.name || uploaded.name;
           blocks[index].mime = uploaded.mime || file.type;
           delete blocks[index].dataUrl;
           renderBlocksEditor();
