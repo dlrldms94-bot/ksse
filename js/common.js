@@ -10,16 +10,6 @@
       ],
     },
     {
-      label: '사전등록',
-      key: 'register',
-      href: 'register.html',
-      children: [
-        { label: '사전등록', href: 'register.html' },
-        { label: '사전신청확인', href: 'register-check.html' },
-        { label: '관람 안내', href: 'guide.html' },
-      ],
-    },
-    {
       label: '프로그램',
       key: 'program',
       href: 'program.html',
@@ -27,6 +17,16 @@
         { label: '프로그램', href: 'program.html' },
         { label: '부대행사', href: 'side-event.html' },
         { label: '이벤트', href: 'event.html' },
+      ],
+    },
+    {
+      label: '사전등록',
+      key: 'register',
+      href: 'register.html',
+      children: [
+        { label: '사전등록', href: 'register.html' },
+        { label: '사전신청확인', href: 'register-check.html' },
+        { label: '관람 안내', href: 'guide.html' },
       ],
     },
     {
