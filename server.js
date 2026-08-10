@@ -14,16 +14,7 @@ const SESSION_MS = 8 * 60 * 60 * 1000;
 const TOKEN_PREFIX = 'v1.';
 
 const upload = multer({
-  storage: multer.diskStorage({
-    destination(_req, _file, cb) {
-      ensureUploadsDir();
-      cb(null, UPLOADS_DIR);
-    },
-    filename(_req, file, cb) {
-      const ext = path.extname(file.originalname || '').toLowerCase();
-      cb(null, `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`);
-    },
-  }),
+  storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
@@ -40,6 +31,18 @@ function resolveUploadFilename(originalname, displayName) {
   if (clientName) return clientName;
   if (!originalname) return '';
   return Buffer.from(originalname, 'latin1').toString('utf8');
+}
+
+function buildUploadFilename(originalname) {
+  const ext = path.extname(originalname || '').toLowerCase();
+  return `${Date.now()}-${crypto.randomBytes(4).toString('hex')}${ext}`;
+}
+
+function contentDispositionFilename(name) {
+  const encoded = encodeURIComponent(name).replace(/['()*]/g, (c) =>
+    `%${c.charCodeAt(0).toString(16).toUpperCase()}`
+  );
+  return `inline; filename*=UTF-8''${encoded}`;
 }
 
 function createAdminToken() {
@@ -211,26 +214,64 @@ app.post('/api/admin/notices/upload', requireAdmin, (req, res) => {
   upload.single('file')(req, res, (err) => {
     if (err) return res.status(400).json({ ok: false, message: err.message || '업로드에 실패했습니다.' });
     if (!req.file) return res.status(400).json({ ok: false, message: '파일을 선택해 주세요.' });
-    const kind = String(req.body?.kind || 'file');
-    const isImage = /^image\//.test(req.file.mimetype || '');
-    if (kind === 'image' && !isImage) {
-      fs.unlinkSync(req.file.path);
-      return res.status(400).json({ ok: false, message: '이미지 파일만 업로드할 수 있습니다.' });
-    }
-    if (kind === 'image' && req.file.size > 3 * 1024 * 1024) {
-      fs.unlinkSync(req.file.path);
-      return res.status(400).json({ ok: false, message: '이미지는 3MB 이하여야 합니다.' });
-    }
-    res.status(201).json({
-      ok: true,
-      url: `/uploads/${req.file.filename}`,
-      name: resolveUploadFilename(req.file.originalname, req.body?.displayName),
-      mime: req.file.mimetype || '',
+
+    (async () => {
+      const kind = String(req.body?.kind || 'file');
+      const isImage = /^image\//.test(req.file.mimetype || '');
+      if (kind === 'image' && !isImage) {
+        return res.status(400).json({ ok: false, message: '이미지 파일만 업로드할 수 있습니다.' });
+      }
+      if (kind === 'image' && req.file.size > 3 * 1024 * 1024) {
+        return res.status(400).json({ ok: false, message: '이미지는 3MB 이하여야 합니다.' });
+      }
+
+      const filename = buildUploadFilename(req.file.originalname);
+      const name = resolveUploadFilename(req.file.originalname, req.body?.displayName);
+      const mime = req.file.mimetype || '';
+
+      await db.saveNoticeUpload({
+        filename,
+        originalName: name,
+        mime,
+        data: req.file.buffer,
+      });
+
+      res.status(201).json({
+        ok: true,
+        url: `/uploads/${filename}`,
+        name,
+        mime,
+      });
+    })().catch((error) => {
+      console.error(error);
+      res.status(500).json({ ok: false, message: error.message || '업로드에 실패했습니다.' });
     });
   });
 });
 
-app.use('/uploads', express.static(UPLOADS_DIR));
+app.get('/uploads/:filename', handleAsync(async (req, res) => {
+  const filename = path.basename(req.params.filename);
+  if (!/^[\w.-]+$/.test(filename)) {
+    return res.status(400).json({ ok: false, message: '잘못된 파일 경로입니다.' });
+  }
+
+  const stored = await db.getNoticeUpload(filename);
+  if (stored) {
+    res.setHeader('Content-Type', stored.mime || 'application/octet-stream');
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    if (stored.originalName) {
+      res.setHeader('Content-Disposition', contentDispositionFilename(stored.originalName));
+    }
+    return res.send(stored.data);
+  }
+
+  const diskPath = path.join(UPLOADS_DIR, filename);
+  if (fs.existsSync(diskPath)) {
+    return res.sendFile(diskPath);
+  }
+
+  return res.status(404).json({ ok: false, message: '파일을 찾을 수 없습니다.' });
+}));
 app.use(express.static(__dirname, { extensions: ['html'] }));
 app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -239,9 +280,11 @@ app.get('/', (_req, res) => {
 async function start() {
   ensureUploadsDir();
   await db.initDatabase();
+  await db.migrateDiskUploadsToDb();
   app.listen(PORT, () => {
     console.log(`KSSE site listening on port ${PORT}`);
     console.log(`DB: ${db.isUsingJson() ? 'JSON (local)' : 'PostgreSQL'}`);
+    console.log(`Uploads: ${db.isUsingJson() ? 'local disk' : 'PostgreSQL (persistent)'}`);
   });
 }
 

@@ -5,6 +5,8 @@ const { Pool } = require('pg');
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'api', 'data');
 const REG_FILE = path.join(DATA_DIR, 'registrations.json');
 const NOTICES_FILE = path.join(DATA_DIR, 'notices.json');
+const UPLOADS_META_FILE = path.join(DATA_DIR, 'uploads-meta.json');
+const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
 
 const DEFAULT_NOTICES = [
   {
@@ -191,6 +193,16 @@ async function initDatabase() {
     )
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS notice_uploads (
+      filename TEXT PRIMARY KEY,
+      original_name TEXT NOT NULL DEFAULT '',
+      mime TEXT NOT NULL DEFAULT '',
+      data BYTEA NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
   await seedNoticesIfEmpty();
   console.log('[db] PostgreSQL 연결 완료');
 }
@@ -330,6 +342,84 @@ async function deleteNotice(id) {
   return result.rowCount > 0;
 }
 
+function safeUploadFilename(filename) {
+  return path.basename(String(filename || ''));
+}
+
+async function saveNoticeUpload({ filename, originalName, mime, data }) {
+  const safeName = safeUploadFilename(filename);
+  if (!safeName || !data) return null;
+
+  if (useJson) {
+    if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    fs.writeFileSync(path.join(UPLOADS_DIR, safeName), data);
+    const meta = readJson(UPLOADS_META_FILE, {});
+    meta[safeName] = { originalName: originalName || '', mime: mime || '' };
+    writeJson(UPLOADS_META_FILE, meta);
+    return safeName;
+  }
+
+  await pool.query(
+    `INSERT INTO notice_uploads (filename, original_name, mime, data, created_at)
+     VALUES ($1, $2, $3, $4, NOW())
+     ON CONFLICT (filename) DO UPDATE SET
+       original_name = EXCLUDED.original_name,
+       mime = EXCLUDED.mime,
+       data = EXCLUDED.data`,
+    [safeName, originalName || '', mime || '', data]
+  );
+  return safeName;
+}
+
+async function getNoticeUpload(filename) {
+  const safeName = safeUploadFilename(filename);
+  if (!safeName) return null;
+
+  if (useJson) {
+    const filePath = path.join(UPLOADS_DIR, safeName);
+    if (!fs.existsSync(filePath)) return null;
+    const meta = readJson(UPLOADS_META_FILE, {});
+    return {
+      data: fs.readFileSync(filePath),
+      mime: meta[safeName]?.mime || '',
+      originalName: meta[safeName]?.originalName || '',
+    };
+  }
+
+  const result = await pool.query(
+    'SELECT original_name, mime, data FROM notice_uploads WHERE filename = $1',
+    [safeName]
+  );
+  if (!result.rows[0]) return null;
+  const row = result.rows[0];
+  return {
+    data: row.data,
+    mime: row.mime || '',
+    originalName: row.original_name || '',
+  };
+}
+
+async function migrateDiskUploadsToDb() {
+  if (useJson || !fs.existsSync(UPLOADS_DIR)) return 0;
+  let imported = 0;
+  for (const filename of fs.readdirSync(UPLOADS_DIR)) {
+    if (filename.startsWith('.')) continue;
+    const existing = await getNoticeUpload(filename);
+    if (existing) continue;
+    const filePath = path.join(UPLOADS_DIR, filename);
+    if (!fs.statSync(filePath).isFile()) continue;
+    await saveNoticeUpload({
+      filename,
+      originalName: filename,
+      mime: '',
+      data: fs.readFileSync(filePath),
+    });
+    imported += 1;
+  }
+  if (imported > 0) console.log(`[db] 디스크 업로드 ${imported}건 DB로 이전`);
+  return imported;
+}
+
 module.exports = {
   initDatabase,
   isUsingJson,
@@ -342,4 +432,7 @@ module.exports = {
   createNotice,
   updateNotice,
   deleteNotice,
+  saveNoticeUpload,
+  getNoticeUpload,
+  migrateDiskUploadsToDb,
 };
