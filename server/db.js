@@ -72,6 +72,18 @@ function normalizePhone(phone) {
   return String(phone).replace(/\D/g, '');
 }
 
+function formatNoticeDate(value) {
+  if (!value) return '';
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+  const s = String(value).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+  const parsed = new Date(s);
+  if (!Number.isNaN(parsed.getTime())) return parsed.toISOString().slice(0, 10);
+  return s.slice(0, 10);
+}
+
 function normalizeNotice(notice) {
   const blocks = Array.isArray(notice.blocks)
     ? notice.blocks
@@ -81,7 +93,7 @@ function normalizeNotice(notice) {
   return {
     id: Number(notice.id),
     title: String(notice.title || '').trim(),
-    date: String(notice.date || '').slice(0, 10),
+    date: formatNoticeDate(notice.date),
     blocks,
     updatedAt: notice.updatedAt || new Date().toISOString(),
   };

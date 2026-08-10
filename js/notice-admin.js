@@ -70,6 +70,16 @@
     return block.url || block.dataUrl || '';
   }
 
+  function youtubeEditorUrl(block) {
+    if (block.url) return block.url;
+    if (block.videoId) return `https://www.youtube.com/watch?v=${block.videoId}`;
+    return '';
+  }
+
+  function resolveYoutubeVideoId(block) {
+    return window.KSSE.parseYoutubeId(block.url) || block.videoId || '';
+  }
+
   function renderBlocksEditor() {
     blocksRoot.innerHTML = blocks
       .map((block, index) => {
@@ -93,7 +103,7 @@
               <span class="block-file-name">${escapeHtml(block.name || '파일을 선택하세요')}</span>
             </div>`;
         } else if (block.type === 'youtube') {
-          body = `<input class="form-control form-control-wide block-youtube-input" type="url" data-field="url" placeholder="https://www.youtube.com/watch?v=..." value="${escapeHtml(block.url || '')}">`;
+          body = `<input class="form-control form-control-wide block-youtube-input" type="url" data-field="url" placeholder="https://www.youtube.com/watch?v=..." value="${escapeHtml(youtubeEditorUrl(block))}">`;
         }
         return `
           <div class="block-item" data-index="${index}">
@@ -268,10 +278,11 @@
     return blocks
       .map((b) => {
         if (b.type === 'youtube') {
+          const videoId = resolveYoutubeVideoId(b);
           return {
             type: 'youtube',
-            url: b.url,
-            videoId: window.KSSE.parseYoutubeId(b.url),
+            url: b.url || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : ''),
+            videoId,
           };
         }
         if (b.type === 'image') {
@@ -285,9 +296,18 @@
       .filter((b) => {
         if (b.type === 'text') return (b.body || '').trim().length > 0;
         if (b.type === 'image' || b.type === 'file') return !!(b.url && !String(b.url).startsWith('data:'));
-        if (b.type === 'youtube') return !!window.KSSE.parseYoutubeId(b.url);
+        if (b.type === 'youtube') return !!b.videoId;
         return false;
       });
+  }
+
+  function hasInvalidYoutubeBlocks() {
+    return blocks.some((block) => {
+      if (block.type !== 'youtube') return false;
+      const url = String(block.url || '').trim();
+      if (!url) return false;
+      return !resolveYoutubeVideoId(block);
+    });
   }
 
   loginForm?.addEventListener('submit', async (e) => {
@@ -325,7 +345,14 @@
     const savedBlocks = collectBlocksFromDom();
     const errBlocks = document.getElementById('err-blocks');
 
-    if (!title || !date) return;
+    if (!title || !date) {
+      if (!date) alert('날짜를 선택해 주세요.');
+      return;
+    }
+    if (hasInvalidYoutubeBlocks()) {
+      alert('유튜브 링크 형식을 확인해 주세요.\n(watch, youtu.be, shorts, live 링크 지원)');
+      return;
+    }
     if (!savedBlocks.length) {
       errBlocks?.classList.add('is-visible');
       return;

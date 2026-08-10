@@ -15,9 +15,14 @@
     if (/^[a-zA-Z0-9_-]{11}$/.test(s)) return s;
     try {
       const url = new URL(s);
-      if (url.hostname.includes('youtu.be')) return url.pathname.slice(1).split('/')[0];
-      if (url.hostname.includes('youtube.com')) {
-        if (url.pathname.startsWith('/embed/')) return url.pathname.split('/')[2];
+      if (url.hostname.includes('youtu.be')) {
+        return url.pathname.slice(1).split('/')[0].split('?')[0];
+      }
+      if (url.hostname.includes('youtube.com') || url.hostname.includes('youtube-nocookie.com')) {
+        const parts = url.pathname.split('/').filter(Boolean);
+        if (parts[0] === 'embed' || parts[0] === 'shorts' || parts[0] === 'live') {
+          return parts[1] || '';
+        }
         return url.searchParams.get('v') || '';
       }
     } catch {
