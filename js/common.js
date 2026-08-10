@@ -1,4 +1,5 @@
 (function () {
+  const SITE_LOGO_URL = 'https://2026ksse.co.kr/';
   const NAV = [
     {
       label: '행사소개',
@@ -53,7 +54,7 @@
     return `
       <header class="site-header">
         <div class="header-inner">
-          <a class="logo" href="index.html">2026 대한민국 사회서비스 박람회</a>
+          <a class="logo" href="${SITE_LOGO_URL}">2026 대한민국 사회서비스 박람회</a>
           <button class="menu-toggle" type="button" aria-label="메뉴 열기">
             <span></span><span></span><span></span>
           </button>
@@ -66,7 +67,7 @@
     return `
       <footer class="site-footer">
         <div class="footer-inner">
-          <div class="footer-logo">2026 대한민국 사회서비스 박람회</div>
+          <a class="footer-logo" href="${SITE_LOGO_URL}">2026 대한민국 사회서비스 박람회</a>
           <div class="footer-center">
             <div class="footer-links">
               <a href="#">개인정보처리방침</a><span class="footer-dot">·</span>

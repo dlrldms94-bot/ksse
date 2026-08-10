@@ -309,6 +309,7 @@ button { cursor: pointer; border: none; background: none; }
   line-height: 1.4;
   letter-spacing: -0.02em;
   white-space: nowrap;
+  color: inherit;
 }
 .footer-center {
   justify-self: center;
