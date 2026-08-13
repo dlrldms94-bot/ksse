@@ -94,8 +94,9 @@ async function handleRegistrationsApi(req, res) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
   if (req.method === 'GET') {
-    const pw = req.query.password || '';
-    if (pw !== ADMIN_PASSWORD) {
+    const header = req.headers.authorization || '';
+    const token = header.startsWith('Bearer ') ? header.slice(7) : '';
+    if (!verifyAdminToken(token)) {
       return res.status(403).json({ ok: false, error: 'forbidden' });
     }
     const list = await db.listRegistrations();
@@ -272,6 +273,23 @@ app.get('/uploads/:filename', handleAsync(async (req, res) => {
 
   return res.status(404).json({ ok: false, message: '파일을 찾을 수 없습니다.' });
 }));
+// 서버 소스·설정·데이터 파일이 정적으로 다운로드되지 않도록 차단
+// (프론트 자산: *.html, /css, /js, /img, /uploads 는 그대로 서빙)
+const BLOCKED_STATIC = [
+  /^\/server\.js$/i,
+  /^\/server\//i,
+  /^\/api\//i,
+  /^\/package(-lock)?\.json$/i,
+  /^\/render\.yaml$/i,
+  /^\/node_modules\//i,
+  /^\/\./,
+];
+app.use((req, res, next) => {
+  if (BLOCKED_STATIC.some((re) => re.test(req.path))) {
+    return res.status(404).json({ ok: false, error: 'not_found' });
+  }
+  next();
+});
 app.use(express.static(__dirname, { extensions: ['html'] }));
 app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));

@@ -234,9 +234,11 @@
     return this.findRegistrationLocal({ name, phone, password });
   };
 
-  window.KSSE.fetchRegistrationsAdmin = async function (adminPassword) {
-    const url = `${REGISTRATION_API}?password=${encodeURIComponent(adminPassword)}`;
-    const res = await fetch(url);
+  window.KSSE.fetchRegistrationsAdmin = async function () {
+    const token = window.KSSE.getAdminToken();
+    const res = await fetch(REGISTRATION_API, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const json = await res.json().catch(() => ({}));
     if (!res.ok || !json.ok) {
       throw new Error(json.error || 'fetch_failed');

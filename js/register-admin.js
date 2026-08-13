@@ -1,6 +1,5 @@
 (function () {
   const ADMIN_SESSION_KEY = 'ksse_reg_admin_session';
-  const ADMIN_PASSWORD = 'ksse2026';
 
   const gate = document.getElementById('admin-gate');
   const app = document.getElementById('admin-app');
@@ -13,15 +12,17 @@
   if (!gate || !app) return;
 
   let rows = [];
-  let adminPassword = '';
 
   function isAuthed() {
-    return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1';
+    return sessionStorage.getItem(ADMIN_SESSION_KEY) === '1' && !!window.KSSE.getAdminToken();
   }
 
   function setAuthed(on) {
     if (on) sessionStorage.setItem(ADMIN_SESSION_KEY, '1');
-    else sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    else {
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      window.KSSE.adminLogout();
+    }
   }
 
   function escapeHtml(str) {
@@ -50,7 +51,7 @@
   async function loadRows() {
     fetchErr.hidden = true;
     try {
-      rows = await window.KSSE.fetchRegistrationsAdmin(adminPassword);
+      rows = await window.KSSE.fetchRegistrationsAdmin();
     } catch {
       rows = window.KSSE.getRegistrationsLocal().slice().sort((a, b) => b.id - a.id);
       fetchErr.hidden = false;
@@ -127,22 +128,21 @@
     URL.revokeObjectURL(a.href);
   }
 
-  loginForm?.addEventListener('submit', (e) => {
+  loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const pw = loginForm.password.value;
     const err = document.getElementById('err-login');
-    if (pw !== ADMIN_PASSWORD) {
+    try {
+      await window.KSSE.adminLogin(pw);
+      err?.classList.remove('is-visible');
+      setAuthed(true);
+      showApp(true);
+    } catch {
       err?.classList.add('is-visible');
-      return;
     }
-    err?.classList.remove('is-visible');
-    adminPassword = pw;
-    setAuthed(true);
-    showApp(true);
   });
 
   document.getElementById('btn-logout')?.addEventListener('click', () => {
-    adminPassword = '';
     setAuthed(false);
     showApp(false);
   });
@@ -151,7 +151,6 @@
   document.getElementById('btn-export')?.addEventListener('click', exportCsv);
 
   if (isAuthed()) {
-    adminPassword = ADMIN_PASSWORD;
     showApp(true);
   } else {
     showApp(false);
