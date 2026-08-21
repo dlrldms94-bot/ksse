@@ -136,7 +136,7 @@
         (popup, index) => `
       <tr>
         <td>${popupsCache.length - index}</td>
-        <td class="popup-col-title">${escapeHtml(popup.title)}</td>
+        <td class="popup-col-title">${escapeHtml(popup.title || '(제목 없음)')}</td>
         <td>${statusBadge(popup)}</td>
         <td class="popup-col-period">${escapeHtml(formatPeriod(popup))}</td>
         <td>
@@ -223,11 +223,6 @@
       endsAt: document.getElementById('popup-ends').value,
       enabled: document.getElementById('popup-enabled').checked,
     };
-
-    if (!payload.title || !payload.body) {
-      alert('제목과 본문을 입력해 주세요.');
-      return;
-    }
 
     try {
       if (idRaw) {

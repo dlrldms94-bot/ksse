@@ -223,9 +223,6 @@ app.get('/api/admin/popups', requireAdmin, handleAsync(async (_req, res) => {
 app.post('/api/admin/popups', requireAdmin, handleAsync(async (req, res) => {
   const title = String(req.body?.title || '').trim();
   const body = String(req.body?.body || '').trim();
-  if (!title || !body) {
-    return res.status(400).json({ ok: false, message: '제목과 본문을 입력해 주세요.' });
-  }
   const popup = await db.createPopup({
     title,
     body,
@@ -242,9 +239,6 @@ app.post('/api/admin/popups', requireAdmin, handleAsync(async (req, res) => {
 app.put('/api/admin/popups/:id', requireAdmin, handleAsync(async (req, res) => {
   const title = String(req.body?.title || '').trim();
   const body = String(req.body?.body || '').trim();
-  if (!title || !body) {
-    return res.status(400).json({ ok: false, message: '제목과 본문을 입력해 주세요.' });
-  }
   const popup = await db.updatePopup(req.params.id, {
     title,
     body,
