@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>팝업 관리 | 2026 대한민국 사회서비스 박람회</title>
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/register.css">
+  <link rel="stylesheet" href="css/notice.css">
+  <link rel="stylesheet" href="css/notice-admin.css">
+  <link rel="stylesheet" href="css/popup.css">
+</head>
+<body data-breadcrumb='[{"label":"홈","href":"index.html"},{"label":"팝업 관리"}]'>
+  <div id="site-header"></div>
+  <main class="page-main">
+    <div id="breadcrumb"></div>
+    <div class="page-inner">
+      <div class="content-card" id="admin-gate">
+        <h1 class="section-title"><span class="dot"></span>홈 팝업 관리</h1>
+        <p class="form-hint admin-gate-hint">관리자 비밀번호로 로그인 후 홈 화면 팝업을 작성·수정할 수 있습니다.</p>
+        <form id="login-form" class="admin-login-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="admin-password">관리자 비밀번호</label>
+            <input class="form-control" type="password" id="admin-password" name="password" autocomplete="current-password">
+            <p class="field-error" id="err-login">비밀번호가 올바르지 않습니다.</p>
+          </div>
+          <div class="btn-group">
+            <button class="btn btn-primary" type="submit">로그인</button>
+            <a class="btn btn-outline" href="index.html">홈으로</a>
+          </div>
+        </form>
+      </div>
+
+      <div class="content-card admin-app" id="admin-app" hidden>
+        <div class="admin-toolbar">
+          <h1 class="section-title"><span class="dot"></span>홈 팝업 관리</h1>
+          <div class="admin-toolbar-actions">
+            <button type="button" class="btn btn-primary" id="btn-new">새 팝업</button>
+            <a class="btn btn-outline" href="notice-admin.html">공지 관리</a>
+            <a class="btn btn-outline" href="index.html">홈으로</a>
+            <button type="button" class="btn btn-outline" id="btn-logout">로그아웃</button>
+          </div>
+        </div>
+
+        <p class="form-hint popup-admin-hint">노출 중인 팝업은 <strong>1개</strong>만 표시됩니다. (노출 ON + 기간 내 · 최신 ID 우선)</p>
+
+        <section class="admin-section" id="admin-list-section">
+          <h2 class="admin-subtitle">등록된 팝업</h2>
+          <div class="notice-board admin-list-board">
+            <table class="notice-table popup-admin-table">
+              <thead>
+                <tr>
+                  <th scope="col">번호</th>
+                  <th scope="col">제목</th>
+                  <th scope="col">노출</th>
+                  <th scope="col">기간</th>
+                  <th scope="col">관리</th>
+                </tr>
+              </thead>
+              <tbody id="admin-popup-list"></tbody>
+            </table>
+          </div>
+          <p class="notice-empty" id="admin-list-empty" hidden>등록된 팝업이 없습니다.</p>
+        </section>
+
+        <section class="admin-section" id="admin-editor-section" hidden>
+          <h2 class="admin-subtitle" id="editor-heading">팝업 작성</h2>
+          <form id="popup-form" novalidate>
+            <input type="hidden" id="popup-id" name="id" value="">
+            <input type="hidden" id="popup-image-url" name="imageUrl" value="">
+            <div class="form-group">
+              <label class="form-label" for="popup-title">제목<span class="req">*</span></label>
+              <input class="form-control form-control-wide" type="text" id="popup-title" name="title" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="popup-body">본문<span class="req">*</span></label>
+              <textarea class="form-control form-control-wide popup-body-input" id="popup-body" name="body" rows="6" required placeholder="팝업에 표시할 안내 문구를 입력하세요."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">이미지 (선택)</label>
+              <div class="popup-image-row">
+                <input type="file" id="popup-image-file" accept="image/*">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-clear-image" hidden>이미지 제거</button>
+              </div>
+              <p class="form-hint">JPG, PNG · 3MB 이하</p>
+              <img class="popup-admin-preview" id="popup-image-preview" alt="" hidden>
+            </div>
+            <div class="form-row popup-form-row">
+              <div class="form-group">
+                <label class="form-label" for="popup-link-url">링크 URL (선택)</label>
+                <input class="form-control form-control-wide" type="url" id="popup-link-url" name="linkUrl" placeholder="https://">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="popup-link-label">링크 버튼 문구</label>
+                <input class="form-control" type="text" id="popup-link-label" name="linkLabel" value="자세히 보기">
+              </div>
+            </div>
+            <div class="form-row popup-form-row">
+              <div class="form-group">
+                <label class="form-label" for="popup-starts">노출 시작일 (선택)</label>
+                <input class="form-control" type="date" id="popup-starts" name="startsAt">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="popup-ends">노출 종료일 (선택)</label>
+                <input class="form-control" type="date" id="popup-ends" name="endsAt">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="popup-check">
+                <input type="checkbox" id="popup-enabled" name="enabled">
+                <span>홈 화면에 노출</span>
+              </label>
+            </div>
+            <div class="btn-group">
+              <button type="submit" class="btn btn-primary">저장</button>
+              <button type="button" class="btn btn-outline" id="btn-cancel">취소</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+  <div id="site-footer"></div>
+  <script src="js/common.js"></script>
+  <script src="js/popup-admin.js"></script>
+</body>
+</html>

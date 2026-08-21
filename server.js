@@ -172,6 +172,11 @@ app.get('/api/notices', handleAsync(async (_req, res) => {
   res.json({ ok: true, notices: await db.listNoticesPublic() });
 }));
 
+app.get('/api/popups/active', handleAsync(async (_req, res) => {
+  const popup = await db.getActivePopup();
+  res.json({ ok: true, popup });
+}));
+
 app.get('/api/notices/:id', handleAsync(async (req, res) => {
   const notice = await db.getNotice(req.params.id);
   if (!notice) return res.status(404).json({ ok: false, message: '게시글을 찾을 수 없습니다.' });
@@ -208,6 +213,55 @@ app.put('/api/admin/notices/:id', requireAdmin, handleAsync(async (req, res) => 
 app.delete('/api/admin/notices/:id', requireAdmin, handleAsync(async (req, res) => {
   const deleted = await db.deleteNotice(req.params.id);
   if (!deleted) return res.status(404).json({ ok: false, message: '게시글을 찾을 수 없습니다.' });
+  res.json({ ok: true });
+}));
+
+app.get('/api/admin/popups', requireAdmin, handleAsync(async (_req, res) => {
+  res.json({ ok: true, popups: await db.listPopupsAdmin() });
+}));
+
+app.post('/api/admin/popups', requireAdmin, handleAsync(async (req, res) => {
+  const title = String(req.body?.title || '').trim();
+  const body = String(req.body?.body || '').trim();
+  if (!title || !body) {
+    return res.status(400).json({ ok: false, message: '제목과 본문을 입력해 주세요.' });
+  }
+  const popup = await db.createPopup({
+    title,
+    body,
+    imageUrl: String(req.body?.imageUrl || '').trim(),
+    linkUrl: String(req.body?.linkUrl || '').trim(),
+    linkLabel: String(req.body?.linkLabel || '자세히 보기').trim(),
+    enabled: Boolean(req.body?.enabled),
+    startsAt: String(req.body?.startsAt || '').trim(),
+    endsAt: String(req.body?.endsAt || '').trim(),
+  });
+  res.status(201).json({ ok: true, popup });
+}));
+
+app.put('/api/admin/popups/:id', requireAdmin, handleAsync(async (req, res) => {
+  const title = String(req.body?.title || '').trim();
+  const body = String(req.body?.body || '').trim();
+  if (!title || !body) {
+    return res.status(400).json({ ok: false, message: '제목과 본문을 입력해 주세요.' });
+  }
+  const popup = await db.updatePopup(req.params.id, {
+    title,
+    body,
+    imageUrl: String(req.body?.imageUrl || '').trim(),
+    linkUrl: String(req.body?.linkUrl || '').trim(),
+    linkLabel: String(req.body?.linkLabel || '자세히 보기').trim(),
+    enabled: Boolean(req.body?.enabled),
+    startsAt: String(req.body?.startsAt || '').trim(),
+    endsAt: String(req.body?.endsAt || '').trim(),
+  });
+  if (!popup) return res.status(404).json({ ok: false, message: '팝업을 찾을 수 없습니다.' });
+  res.json({ ok: true, popup });
+}));
+
+app.delete('/api/admin/popups/:id', requireAdmin, handleAsync(async (req, res) => {
+  const deleted = await db.deletePopup(req.params.id);
+  if (!deleted) return res.status(404).json({ ok: false, message: '팝업을 찾을 수 없습니다.' });
   res.json({ ok: true });
 }));
 

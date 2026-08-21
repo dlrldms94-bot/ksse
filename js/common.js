@@ -321,6 +321,16 @@
     return json.notice || null;
   };
 
+  window.KSSE.fetchActivePopup = async function () {
+    try {
+      const res = await fetch('/api/popups/active');
+      const json = await parseJsonResponse(res);
+      return json.popup || null;
+    } catch {
+      return null;
+    }
+  };
+
   window.KSSE.getNoticeBlocks = function (notice) {
     if (!notice) return [];
     if (Array.isArray(notice.blocks) && notice.blocks.length) return notice.blocks;

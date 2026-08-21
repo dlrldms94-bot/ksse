@@ -5,6 +5,7 @@ const { Pool } = require('pg');
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'api', 'data');
 const REG_FILE = path.join(DATA_DIR, 'registrations.json');
 const NOTICES_FILE = path.join(DATA_DIR, 'notices.json');
+const POPUPS_FILE = path.join(DATA_DIR, 'popups.json');
 const UPLOADS_META_FILE = path.join(DATA_DIR, 'uploads-meta.json');
 const UPLOADS_DIR = path.join(DATA_DIR, 'uploads');
 
@@ -200,6 +201,21 @@ async function initDatabase() {
       mime TEXT NOT NULL DEFAULT '',
       data BYTEA NOT NULL,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS popups (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL DEFAULT '',
+      body TEXT NOT NULL DEFAULT '',
+      image_url TEXT NOT NULL DEFAULT '',
+      link_url TEXT NOT NULL DEFAULT '',
+      link_label TEXT NOT NULL DEFAULT '자세히 보기',
+      enabled BOOLEAN NOT NULL DEFAULT false,
+      starts_at DATE,
+      ends_at DATE,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `);
 
@@ -420,6 +436,154 @@ async function migrateDiskUploadsToDb() {
   return imported;
 }
 
+function normalizePopupDate(value) {
+  if (!value) return '';
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString().slice(0, 10);
+  }
+  const s = String(value).trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0, 10);
+  return '';
+}
+
+function normalizePopup(popup) {
+  return {
+    id: Number(popup.id),
+    title: String(popup.title || '').trim(),
+    body: String(popup.body || '').trim(),
+    imageUrl: String(popup.image_url || popup.imageUrl || '').trim(),
+    linkUrl: String(popup.link_url || popup.linkUrl || '').trim(),
+    linkLabel: String(popup.link_label || popup.linkLabel || '자세히 보기').trim() || '자세히 보기',
+    enabled: Boolean(popup.enabled),
+    startsAt: normalizePopupDate(popup.starts_at || popup.startsAt),
+    endsAt: normalizePopupDate(popup.ends_at || popup.endsAt),
+    updatedAt: popup.updated_at || popup.updatedAt || new Date().toISOString(),
+  };
+}
+
+function mapPopupRow(row) {
+  return normalizePopup({
+    id: row.id,
+    title: row.title,
+    body: row.body,
+    image_url: row.image_url,
+    link_url: row.link_url,
+    link_label: row.link_label,
+    enabled: row.enabled,
+    starts_at: row.starts_at,
+    ends_at: row.ends_at,
+    updated_at: row.updated_at,
+  });
+}
+
+function isPopupInRange(popup, today) {
+  if (popup.startsAt && today < popup.startsAt) return false;
+  if (popup.endsAt && today > popup.endsAt) return false;
+  return true;
+}
+
+function sortPopups(list) {
+  return list.slice().sort((a, b) => b.id - a.id);
+}
+
+async function listPopupsAdmin() {
+  if (useJson) {
+    const list = readJson(POPUPS_FILE, []);
+    return sortPopups((Array.isArray(list) ? list : []).map(normalizePopup));
+  }
+  const result = await pool.query('SELECT * FROM popups ORDER BY id DESC');
+  return result.rows.map(mapPopupRow);
+}
+
+async function getPopup(id) {
+  if (useJson) {
+    const popup = readJson(POPUPS_FILE, []).find((p) => String(p.id) === String(id));
+    return popup ? normalizePopup(popup) : null;
+  }
+  const result = await pool.query('SELECT * FROM popups WHERE id = $1', [id]);
+  return result.rows[0] ? mapPopupRow(result.rows[0]) : null;
+}
+
+async function getActivePopup() {
+  const today = new Date().toISOString().slice(0, 10);
+  const list = await listPopupsAdmin();
+  return list.find((popup) => popup.enabled && isPopupInRange(popup, today)) || null;
+}
+
+async function createPopup(payload) {
+  const data = normalizePopup({ ...payload, id: 0, updatedAt: new Date().toISOString() });
+  if (useJson) {
+    const list = readJson(POPUPS_FILE, []);
+    const popup = normalizePopup({
+      id: list.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0) + 1,
+      ...data,
+    });
+    list.push(popup);
+    writeJson(POPUPS_FILE, list);
+    return popup;
+  }
+  const result = await pool.query(
+    `INSERT INTO popups (title, body, image_url, link_url, link_label, enabled, starts_at, ends_at, updated_at)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
+     RETURNING *`,
+    [
+      data.title,
+      data.body,
+      data.imageUrl,
+      data.linkUrl,
+      data.linkLabel,
+      data.enabled,
+      data.startsAt || null,
+      data.endsAt || null,
+    ]
+  );
+  return mapPopupRow(result.rows[0]);
+}
+
+async function updatePopup(id, payload) {
+  const data = normalizePopup({ ...payload, id, updatedAt: new Date().toISOString() });
+  if (useJson) {
+    const list = readJson(POPUPS_FILE, []);
+    const idx = list.findIndex((p) => String(p.id) === String(id));
+    if (idx < 0) return null;
+    const popup = normalizePopup({ id: list[idx].id, ...data });
+    list[idx] = popup;
+    writeJson(POPUPS_FILE, list);
+    return popup;
+  }
+  const result = await pool.query(
+    `UPDATE popups
+     SET title = $1, body = $2, image_url = $3, link_url = $4, link_label = $5,
+         enabled = $6, starts_at = $7, ends_at = $8, updated_at = NOW()
+     WHERE id = $9
+     RETURNING *`,
+    [
+      data.title,
+      data.body,
+      data.imageUrl,
+      data.linkUrl,
+      data.linkLabel,
+      data.enabled,
+      data.startsAt || null,
+      data.endsAt || null,
+      id,
+    ]
+  );
+  return result.rows[0] ? mapPopupRow(result.rows[0]) : null;
+}
+
+async function deletePopup(id) {
+  if (useJson) {
+    const list = readJson(POPUPS_FILE, []);
+    const next = list.filter((p) => String(p.id) !== String(id));
+    if (next.length === list.length) return false;
+    writeJson(POPUPS_FILE, next);
+    return true;
+  }
+  const result = await pool.query('DELETE FROM popups WHERE id = $1', [id]);
+  return result.rowCount > 0;
+}
+
 module.exports = {
   initDatabase,
   isUsingJson,
@@ -435,4 +599,10 @@ module.exports = {
   saveNoticeUpload,
   getNoticeUpload,
   migrateDiskUploadsToDb,
+  listPopupsAdmin,
+  getPopup,
+  getActivePopup,
+  createPopup,
+  updatePopup,
+  deletePopup,
 };
