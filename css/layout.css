@@ -1,0 +1,41 @@
+/* ===== Layout / floor plan ===== */
+.layout-card {
+  padding: 0;
+  overflow: hidden;
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--blue-soft);
+  box-shadow: 0 4px 24px rgba(27, 94, 170, 0.06);
+}
+
+.layout-card__head {
+  padding: clamp(24px, 4vw, 32px) clamp(20px, 4vw, 36px) clamp(16px, 3vw, 20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.layout-card__title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 700;
+  color: var(--blue);
+  text-align: center;
+}
+
+.layout-card__figure {
+  margin: 0;
+  padding: clamp(16px, 3vw, 28px);
+  background: var(--white);
+}
+
+.layout-card__figure img {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 768px) {
+  .layout-card__figure {
+    padding: 12px;
+  }
+}
