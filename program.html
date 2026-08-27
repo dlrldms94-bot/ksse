@@ -16,220 +16,142 @@
     <div id="breadcrumb"></div>
 
     <div class="page-inner">
-      <div class="day-tabs" role="tablist">
-        <button type="button" class="day-tab is-active" data-day="1" role="tab" aria-selected="true">
-          <span class="day-tab-label">1일차</span>
-          <span class="day-tab-date">9.15.(화)</span>
-        </button>
-        <button type="button" class="day-tab" data-day="2" role="tab" aria-selected="false">
-          <span class="day-tab-label">2일차</span>
-          <span class="day-tab-date">9.16.(수)</span>
-        </button>
-      </div>
-
-      <div class="schedule-day is-active" data-day="1">
-        <div class="schedule-card">
-          <div class="schedule-wrap">
-            <table class="schedule-table">
-              <thead>
-                <tr class="schedule-head-row schedule-head-row--loc">
-                  <th class="col-corner" rowspan="2" scope="colgroup">
-                    <span class="corner-loc">장소</span>
-                    <span class="corner-time">시간</span>
-                  </th>
-                  <th class="schedule-loc-head" colspan="2" scope="colgroup">3층 전시장</th>
-                  <th class="schedule-loc-head" scope="colgroup">5층</th>
-                </tr>
-                <tr class="schedule-head-row schedule-head-row--venue">
-                  <th class="col-main" scope="col">
-                    <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>메인무대</span>
-                  </th>
-                  <th class="col-booth" scope="col">
-                    <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>홍보부스</span>
-                  </th>
-                  <th class="col-grand" scope="col">
-                    <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>그랜드홀</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">10:00-11:00</span></td>
-                  <td class="is-stretch" rowspan="6"><div class="slot slot-prep">준비중</div></td>
-                  <td class="is-stretch" rowspan="6"><div class="slot slot-prep">준비중</div></td>
-                  <td class="is-stretch" rowspan="5">
-                    <div class="slot slot-grand">
-                      사회서비스원 성과대회
-                      <span class="slot-time-note">(10:00-12:30)</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">11:00-12:00</span></td>
-                </tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">12:00-13:00</span></td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="is-stretch" rowspan="2"><div class="slot slot-lunch">오찬</div></td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">13:00-14:00</span></td>
-                  <td class="is-stretch"><div class="slot slot-prep">준비중</div></td>
-                  <td class="is-stretch"><div class="slot slot-booth">부스 오픈</div></td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="is-stretch" rowspan="2">
+      <div class="schedule-card">
+        <div class="schedule-wrap">
+          <table class="schedule-table schedule-table--unified">
+            <thead>
+              <tr class="schedule-head-row schedule-head-row--loc">
+                <th class="col-corner" rowspan="2" scope="colgroup">
+                  <span class="corner-loc">장소</span>
+                  <span class="corner-time">일정</span>
+                </th>
+                <th class="schedule-loc-head" colspan="2" scope="colgroup">3층 전시장</th>
+                <th class="schedule-loc-head" scope="colgroup">5층</th>
+              </tr>
+              <tr class="schedule-head-row schedule-head-row--venue">
+                <th class="col-main" scope="col">
+                  <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>메인무대</span>
+                </th>
+                <th class="col-booth" scope="col">
+                  <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>홍보부스</span>
+                </th>
+                <th class="col-grand" scope="col">
+                  <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>그랜드홀</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 1일차 -->
+              <tr class="schedule-row schedule-row--day1">
+                <td class="day-cell" rowspan="2">
+                  <span class="day-cell__label">1일차</span>
+                  <span class="day-cell__date">9.15.(화)</span>
+                </td>
+                <td class="period-cell"><span class="period-label">오전</span></td>
+                <td class="venue-cell venue-cell--floor3" colspan="2">
+                  <div class="slot slot-empty slot-floor3" aria-hidden="true"></div>
+                </td>
+                <td class="venue-cell venue-cell--grand">
+                  <div class="slot slot-grand">
+                    사회서비스원 성과대회
+                    <span class="slot-time-note">(10:00-12:30)</span>
+                  </div>
+                </td>
+              </tr>
+              <tr class="schedule-row schedule-row--day1">
+                <td class="period-cell"><span class="period-label">오후</span></td>
+                <td class="venue-cell venue-cell--main">
+                  <div class="slot-stack">
                     <div class="slot slot-main">
                       개막식
                       <span class="slot-time-note">(13:30-14:10)</span>
                     </div>
-                  </td>
-                  <td class="is-stretch"><div class="slot slot-booth">(부스 운영)</div></td>
-                  <td class="is-stretch" rowspan="7">
-                    <div class="slot slot-grand slot-tall">
-                      사회서비스원<br>통합 워크숍
-                      <span class="slot-tag">1일차</span>
-                      <span class="slot-time-note">(13:30-17:00)</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">14:00-15:00</span></td>
-                  <td class="is-stretch">
-                    <div class="slot slot-booth-dark slot--inline">
-                      부스탐방<span class="slot-num">1</span>
-                      <span class="slot-time-note slot-time-note--inline">(14:10-14:30)</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="is-stretch"><div class="slot slot-prep">준비중</div></td>
-                  <td class="is-stretch"><div class="slot slot-booth">(부스 운영)</div></td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">15:00-16:00</span></td>
-                  <td class="is-stretch" rowspan="4">
                     <div class="slot slot-main">
                       사회서비스 정책포럼
-                      <span class="slot-badge">사회서비스 정책 20년, 회고와 전망</span>
+                      <span class="slot-sub">「사회서비스 정책 20년, 회고와 전망」</span>
                       <span class="slot-time-note">(15:00-17:00)</span>
                     </div>
-                  </td>
-                  <td class="is-stretch" rowspan="3"><div class="slot slot-booth">(부스 운영)</div></td>
-                </tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">16:00-17:00</span></td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="is-stretch">
-                    <div class="slot slot-booth-dark slot--inline">
-                      부스탐방<span class="slot-num">2</span>
-                      <span class="slot-time-note slot-time-note--inline">(16:30-16:50)</span>
+                  </div>
+                </td>
+                <td class="venue-cell venue-cell--booth">
+                  <div class="slot slot-booth slot-booth--detail">
+                    <div class="slot-booth-title">
+                      홍보부스 운영
+                      <span class="slot-time-note">(13:30-17:00)</span>
                     </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                    <ul class="slot-list">
+                      <li>통합돌봄 체험 부스</li>
+                      <li>이용자·종사자 권익 부스</li>
+                      <li>위기아동·청년 부스</li>
+                      <li>스마트사회서비스시설 체험 부스</li>
+                    </ul>
+                    <p class="slot-footnote">
+                      청년 ON 스테이지 (깜짝 공연)
+                      <span class="slot-time-note">(16:00-17:00)</span>
+                    </p>
+                  </div>
+                </td>
+                <td class="venue-cell venue-cell--grand">
+                  <div class="slot slot-grand slot-tall">
+                    사회서비스원 통합워크숍 I
+                    <span class="slot-time-note">(13:30-17:00)</span>
+                  </div>
+                </td>
+              </tr>
 
-      <div class="schedule-day" data-day="2">
-        <div class="schedule-card">
-          <div class="schedule-wrap">
-            <table class="schedule-table">
-              <thead>
-                <tr class="schedule-head-row schedule-head-row--loc">
-                  <th class="col-corner" rowspan="2" scope="colgroup">
-                    <span class="corner-loc">장소</span>
-                    <span class="corner-time">시간</span>
-                  </th>
-                  <th class="schedule-loc-head" colspan="2" scope="colgroup">3층 전시장</th>
-                  <th class="schedule-loc-head" scope="colgroup">5층</th>
-                </tr>
-                <tr class="schedule-head-row schedule-head-row--venue">
-                  <th class="col-main" scope="col">
-                    <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>메인무대</span>
-                  </th>
-                  <th class="col-booth" scope="col">
-                    <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>홍보부스</span>
-                  </th>
-                  <th class="col-grand" scope="col">
-                    <span class="schedule-col-head"><span class="col-dot" aria-hidden="true"></span>그랜드홀</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">10:00-11:00</span></td>
-                  <td class="is-stretch" rowspan="8"><div class="slot slot-prep">준비중</div></td>
-                  <td class="is-stretch" rowspan="6"><div class="slot slot-booth">(부스 운영)</div></td>
-                  <td class="is-stretch" rowspan="4">
-                    <div class="slot slot-grand">
-                      정책토론회 「돌봄인력 양성체계의 현황과 과제」
-                      <span class="slot-time-note">(10:00-12:00)</span>
+              <!-- 2일차 -->
+              <tr class="schedule-row schedule-row--day2">
+                <td class="day-cell" rowspan="2">
+                  <span class="day-cell__label">2일차</span>
+                  <span class="day-cell__date">9.16.(수)</span>
+                </td>
+                <td class="period-cell"><span class="period-label">오전</span></td>
+                <td class="venue-cell venue-cell--main">
+                  <div class="slot slot-empty slot-main" aria-hidden="true"></div>
+                </td>
+                <td class="venue-cell venue-cell--booth" rowspan="2">
+                  <div class="slot slot-booth slot-booth--detail slot-booth--daylong">
+                    <div class="slot-booth-title">
+                      부스 탐방
+                      <span class="slot-time-note">(10:00-16:00)</span>
                     </div>
-                  </td>
-                </tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">11:00-12:00</span></td>
-                </tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">12:00-13:00</span></td>
-                  <td class="is-stretch" rowspan="3"><div class="slot slot-prep">준비중</div></td>
-                </tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">13:00-14:00</span></td>
-                  <td class="is-stretch">
-                    <div class="slot slot-booth-dark slot--inline">
-                      부스탐방<span class="slot-num">1</span>
-                      <span class="slot-time-note slot-time-note--inline">(13:00-13:30)</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="is-stretch" rowspan="3"><div class="slot slot-booth">(부스 운영)</div></td>
-                  <td class="is-stretch" rowspan="5">
-                    <div class="slot slot-grand slot-tall">
-                      사회서비스원<br>통합 워크숍
-                      <span class="slot-tag">2일차</span>
-                      <span class="slot-time-note">(13:30-16:00)</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">14:00-15:00</span></td>
-                  <td class="is-stretch" rowspan="4">
-                    <div class="slot slot-main">
-                      한국사회보장정보원 특별세션
-                      <span class="slot-badge">사회서비스 전자바우처 제도 도입 20년,<br>성과와 발전방향</span>
-                      <span class="slot-time-note">(14:00-16:00)</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="schedule-row"></tr>
-                <tr class="schedule-row">
-                  <td class="time-cell is-stretch" rowspan="2"><span class="time-range">15:00-16:00</span></td>
-                  <td class="is-stretch">
-                    <div class="slot slot-booth-dark slot--inline">
-                      부스탐방<span class="slot-num">2</span>
-                      <span class="slot-time-note slot-time-note--inline">(15:00-15:30)</span>
-                    </div>
-                  </td>
-                </tr>
-                <tr class="schedule-row">
-                  <td class="is-stretch"><div class="slot slot-booth">(부스 운영)</div></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                    <ul class="slot-list">
+                      <li>‘돌봄의 현장’ 부스</li>
+                      <li>‘돌봄의 연결’ 부스</li>
+                      <li>‘돌봄의 기술’ 부스</li>
+                    </ul>
+                    <p class="slot-footnote">
+                      청년 ON 스테이지 (깜짝 공연)
+                      <span class="slot-time-note">(10:30-11:30)</span>
+                    </p>
+                  </div>
+                </td>
+                <td class="venue-cell venue-cell--grand">
+                  <div class="slot slot-grand">
+                    정책토론회
+                    <span class="slot-sub">「돌봄인력 양성체계의 현황과 과제」</span>
+                    <span class="slot-time-note">(10:00-12:00)</span>
+                  </div>
+                </td>
+              </tr>
+              <tr class="schedule-row schedule-row--day2">
+                <td class="period-cell"><span class="period-label">오후</span></td>
+                <td class="venue-cell venue-cell--main">
+                  <div class="slot slot-main slot-tall">
+                    한국사회보장정보원 특별세션
+                    <span class="slot-sub">「사회서비스 전자바우처 제도 도입 20년, 성과와 발전방향」</span>
+                    <span class="slot-time-note">(14:00-16:00)</span>
+                  </div>
+                </td>
+                <td class="venue-cell venue-cell--grand">
+                  <div class="slot slot-grand slot-tall">
+                    사회서비스원 통합워크숍 II
+                    <span class="slot-time-note">(13:30-16:00)</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -237,6 +159,5 @@
 
   <div id="site-footer"></div>
   <script src="js/common.js"></script>
-  <script src="js/program.js"></script>
 </body>
 </html>

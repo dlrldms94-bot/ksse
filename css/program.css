@@ -1,47 +1,4 @@
-/* ===== 프로그램 (program.html) ===== */
-.day-tabs {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: 32px;
-}
-.day-tab {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-width: 200px;
-  height: 52px;
-  padding: 0 32px;
-  border-radius: 999px;
-  border: 2px solid var(--blue);
-  background: var(--white);
-  transition: 0.2s;
-  cursor: pointer;
-}
-.day-tab-label {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--blue);
-}
-.day-tab-date {
-  font-size: 17px;
-  font-weight: 400;
-  color: #b8bcc4;
-}
-.day-tab.is-active {
-  background: var(--blue);
-  border-color: var(--blue);
-}
-.day-tab.is-active .day-tab-label,
-.day-tab.is-active .day-tab-date {
-  color: var(--white);
-  font-weight: 700;
-}
-.day-tab:not(.is-active):hover {
-  background: var(--blue-pale);
-}
+/* ===== 프로그램 (program.html) — 1·2일차 통합 타임테이블 ===== */
 
 .schedule-card {
   background: var(--white);
@@ -51,28 +8,32 @@
   box-shadow: 0 4px 24px rgba(27, 94, 170, 0.06);
 }
 
-.schedule-wrap { overflow-x: auto; }
+.schedule-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .schedule-table {
   width: 100%;
-  min-width: 820px;
+  min-width: 900px;
   table-layout: fixed;
   border-collapse: separate;
-  border-spacing: 8px 6px;
-  --schedule-unit-h: 40px;
-  --schedule-time-w: 148px;
+  border-spacing: 8px 8px;
+  --schedule-day-w: 100px;
+  --schedule-period-w: 68px;
   --prog-main: #1b5eaa;
   --prog-booth: #72be7e;
   --prog-grand: #c4d848;
   --prog-grand-text: #4a5a10;
-  --prog-slot-main: color-mix(in srgb, var(--prog-main) 22%, white);
-  --prog-slot-booth: color-mix(in srgb, var(--prog-booth) 28%, white);
-  --prog-slot-booth-strong: color-mix(in srgb, var(--prog-booth) 72%, white);
-  --prog-slot-grand: color-mix(in srgb, var(--prog-grand) 38%, white);
-  --prog-slot-grand-muted: color-mix(in srgb, var(--prog-grand) 28%, white);
+  --prog-slot-main: #dbeafe;
+  --prog-slot-main-empty: #edf4fc;
+  --prog-slot-booth: #dcf5e3;
+  --prog-slot-grand: #eef6c8;
+  --prog-slot-floor3-empty: #eef1f5;
+  --prog-day1-bg: #e8f2fb;
+  --prog-day2-bg: #e8f4ea;
 }
-.schedule-table tbody tr.schedule-row {
-  height: var(--schedule-unit-h);
-}
+
 .schedule-table thead th {
   vertical-align: middle;
   padding: 0;
@@ -80,8 +41,9 @@
   font-weight: 700;
   text-align: center;
 }
+
 .schedule-table thead th.col-corner {
-  width: var(--schedule-time-w);
+  width: calc(var(--schedule-day-w) + var(--schedule-period-w));
   position: relative;
   box-sizing: border-box;
   min-height: 96px;
@@ -90,6 +52,7 @@
   border-radius: 12px;
   overflow: hidden;
 }
+
 .schedule-table thead th.col-corner::before {
   content: '';
   position: absolute;
@@ -103,6 +66,7 @@
   );
   pointer-events: none;
 }
+
 .corner-loc,
 .corner-time {
   position: absolute;
@@ -111,14 +75,17 @@
   color: #444;
   line-height: 1.2;
 }
+
 .corner-loc {
   top: 14px;
   right: 14px;
 }
+
 .corner-time {
   bottom: 14px;
   left: 14px;
 }
+
 .schedule-head-row--loc .schedule-loc-head {
   box-sizing: border-box;
   min-height: 44px;
@@ -130,14 +97,13 @@
   font-weight: 700;
   color: #333;
 }
+
 .schedule-table thead th.col-main,
 .schedule-table thead th.col-booth,
 .schedule-table thead th.col-grand {
-  width: calc((100% - var(--schedule-time-w)) / 3);
+  width: calc((100% - var(--schedule-day-w) - var(--schedule-period-w)) / 3);
 }
-.schedule-table tbody td.time-cell {
-  width: var(--schedule-time-w);
-}
+
 .schedule-col-head {
   display: flex;
   align-items: center;
@@ -149,194 +115,277 @@
   font-size: 17px;
   font-weight: 700;
 }
+
 .col-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
+
 .schedule-table thead th.col-main .schedule-col-head {
   background: var(--prog-main);
   color: var(--white);
 }
+
 .schedule-table thead th.col-main .col-dot {
   background: var(--white);
 }
+
 .schedule-table thead th.col-booth .schedule-col-head {
   background: var(--prog-booth);
   color: var(--white);
 }
+
 .schedule-table thead th.col-booth .col-dot {
   background: var(--white);
 }
+
 .schedule-table thead th.col-grand .schedule-col-head {
   background: var(--prog-grand);
   color: var(--prog-grand-text);
 }
+
 .schedule-table thead th.col-grand .col-dot {
   background: var(--prog-grand-text);
 }
 
+/* Body cells */
 .schedule-table tbody td {
   padding: 0;
-  vertical-align: middle;
-  text-align: center;
-}
-.schedule-table tbody td.is-stretch {
   vertical-align: stretch;
   height: 1px;
-}
-.schedule-table tbody td.is-stretch > .slot,
-.schedule-table tbody td.is-stretch > .slot-stack {
-  min-height: 100%;
 }
 
-.time-cell {
-  padding: 0 !important;
-  vertical-align: stretch;
-  background: transparent;
-  border: none;
+.day-cell {
+  width: var(--schedule-day-w);
+  padding: 16px 10px !important;
+  text-align: center;
+  vertical-align: middle !important;
+  border-radius: 12px;
+  border: 1px solid #d8dee6;
 }
-.time-cell.is-stretch {
-  height: 1px;
+
+.schedule-row--day1 .day-cell {
+  background: var(--prog-day1-bg);
+  border-color: #c5d9ef;
 }
-.time-cell.is-stretch > .time-range {
-  min-height: 100%;
+
+.schedule-row--day2 .day-cell {
+  background: var(--prog-day2-bg);
+  border-color: #c5dfc9;
 }
-.time-range {
+
+.day-cell__label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--blue);
+  line-height: 1.3;
+}
+
+.schedule-row--day2 .day-cell__label {
+  color: #2d7a3e;
+}
+
+.day-cell__date {
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+}
+
+.period-cell {
+  width: var(--schedule-period-w);
+  padding: 8px !important;
+  vertical-align: middle !important;
+}
+
+.period-label {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
-  width: 100%;
-  min-height: calc(var(--schedule-unit-h) - 4px);
-  height: 100%;
-  padding: 10px 8px;
-  background: var(--white);
-  border: 1px solid #d8dee6;
+  min-height: 100%;
+  padding: 12px 8px;
   border-radius: 12px;
+  border: 1px solid #d8dee6;
+  background: var(--white);
   font-size: 16px;
   font-weight: 700;
-  color: #1a1a1a;
-  line-height: 1.35;
-  text-align: center;
-  white-space: pre-line;
+  color: #333;
+}
+
+.venue-cell > .slot,
+.venue-cell > .slot-stack {
+  min-height: 110px;
+  height: 100%;
 }
 
 .slot {
   border-radius: 12px;
-  padding: 10px 12px;
-  font-size: 16px;
+  padding: 14px 16px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 1.4;
-  min-height: calc(var(--schedule-unit-h) - 4px);
-  height: 100%;
+  line-height: 1.45;
+  min-height: 100%;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   gap: 6px;
+  text-align: center;
 }
+
 .slot-stack {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   height: 100%;
+  min-height: 110px;
 }
+
 .slot-stack .slot {
   flex: 1;
   min-height: 0;
 }
 
-.slot-prep {
-  background: #eef3f8;
-  color: #8899aa;
-  font-weight: 600;
+.slot-empty {
+  min-height: 110px;
 }
+
+.slot-empty.slot-floor3 {
+  background: var(--prog-slot-floor3-empty);
+  border: 1px solid #dde2e8;
+}
+
+.slot-empty.slot-main {
+  background: var(--prog-slot-main-empty);
+  border: 1px solid #d0e3f5;
+}
+
+.slot-main {
+  background: var(--prog-slot-main);
+  color: var(--prog-main);
+}
+
+.slot-booth {
+  background: var(--prog-slot-booth);
+  color: #2d6b38;
+}
+
+.slot-booth--detail {
+  align-items: stretch;
+  justify-content: flex-start;
+  text-align: center;
+  height: 100%;
+}
+
+.slot-booth--daylong {
+  min-height: 240px;
+}
+
+.slot-booth-title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.slot-grand {
+  background: var(--prog-slot-grand);
+  color: var(--prog-grand-text);
+}
+
+.slot-tall {
+  justify-content: center;
+}
+
+.slot-sub {
+  display: block;
+  max-width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
 .slot-time-note {
+  display: block;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.35;
-  opacity: 0.85;
-}
-.slot-time-note--inline {
-  font-size: 12px;
-  font-weight: 600;
-}
-.slot-main { background: var(--prog-slot-main); color: var(--prog-main); }
-.slot-booth { background: var(--prog-slot-booth); color: #2d6b38; }
-.slot-booth-dark {
-  background: var(--prog-slot-booth-strong);
-  color: var(--white);
-}
-.slot-grand { background: var(--prog-slot-grand); color: var(--prog-grand-text); }
-.slot-lunch {
-  background: var(--prog-slot-grand-muted);
-  color: var(--prog-grand-text);
-  font-size: 16px;
-  min-height: 48px;
-  padding: 12px;
-}
-.slot-tall {
-  min-height: 100%;
-  justify-content: center;
-}
-.slot--inline {
-  flex-direction: row;
-  flex-wrap: nowrap;
-  white-space: nowrap;
-  gap: 4px;
 }
 
-.slot-badge {
-  display: inline-block;
-  max-width: 100%;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: var(--prog-main);
-  color: var(--white);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-  text-align: center;
+.slot-booth-title .slot-time-note,
+.slot-footnote .slot-time-note {
+  display: inline;
+  font-size: inherit;
 }
-.slot-tag {
-  display: inline-block;
-  padding: 4px 14px;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--prog-grand) 55%, white);
-  color: var(--prog-grand-text);
-  font-size: 14px;
+
+.slot-list {
+  width: 100%;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.slot-list li {
+  position: relative;
+  padding-left: 12px;
+}
+
+.slot-list li::before {
+  content: '-';
+  position: absolute;
+  left: 0;
   font-weight: 600;
 }
-.slot-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
-  margin-left: 0;
-  border-radius: 50%;
-  background: var(--white);
-  color: var(--prog-booth);
+
+.slot-footnote {
+  margin: 10px 0 0;
   font-size: 14px;
   font-weight: 700;
-  vertical-align: middle;
+  line-height: 1.45;
 }
 
-.schedule-day { display: none; }
-.schedule-day.is-active { display: block; }
+.slot-booth--detail:not(.slot-booth--daylong) .slot-footnote {
+  margin-top: auto;
+  padding-top: 8px;
+}
 
 @media (max-width: 768px) {
-  .day-tab {
-    min-width: 0;
-    flex: 1;
-    padding: 0 16px;
-    height: 48px;
+  .schedule-card {
+    padding: 20px 12px 24px;
   }
-  .day-tab-label { font-size: 19px; }
-  .day-tab-date { font-size: 15px; }
-  .schedule-card { padding: 20px 12px 24px; }
+
+  .schedule-table {
+    min-width: 780px;
+    --schedule-day-w: 88px;
+    --schedule-period-w: 60px;
+  }
+
+  .day-cell__label {
+    font-size: 18px;
+  }
+
+  .day-cell__date {
+    font-size: 13px;
+  }
+
+  .slot {
+    font-size: 14px;
+    padding: 12px 10px;
+  }
+
+  .slot-sub,
+  .slot-time-note,
+  .slot-list,
+  .slot-footnote {
+    font-size: 12px;
+  }
 }
