@@ -51,7 +51,7 @@
               <thead>
                 <tr>
                   <th scope="col">번호</th>
-                  <th scope="col">제목</th>
+                  <th scope="col">이미지</th>
                   <th scope="col">노출</th>
                   <th scope="col">기간</th>
                   <th scope="col">관리</th>
@@ -69,15 +69,7 @@
             <input type="hidden" id="popup-id" name="id" value="">
             <input type="hidden" id="popup-image-url" name="imageUrl" value="">
             <div class="form-group">
-              <label class="form-label" for="popup-title">제목 (선택)</label>
-              <input class="form-control form-control-wide" type="text" id="popup-title" name="title">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="popup-body">본문 (선택)</label>
-              <textarea class="form-control form-control-wide popup-body-input" id="popup-body" name="body" rows="6" placeholder="팝업에 표시할 안내 문구를 입력하세요."></textarea>
-            </div>
-            <div class="form-group">
-              <label class="form-label">이미지 (선택)</label>
+              <label class="form-label">이미지</label>
               <div class="popup-image-row">
                 <input type="file" id="popup-image-file" accept="image/*">
                 <button type="button" class="btn btn-outline btn-sm" id="btn-clear-image" hidden>이미지 제거</button>
@@ -85,15 +77,10 @@
               <p class="form-hint">JPG, PNG · 3MB 이하</p>
               <img class="popup-admin-preview" id="popup-image-preview" alt="" hidden>
             </div>
-            <div class="form-row popup-form-row">
-              <div class="form-group">
-                <label class="form-label" for="popup-link-url">링크 URL (선택)</label>
-                <input class="form-control form-control-wide" type="url" id="popup-link-url" name="linkUrl" placeholder="https://">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="popup-link-label">링크 버튼 문구</label>
-                <input class="form-control" type="text" id="popup-link-label" name="linkLabel" value="자세히 보기">
-              </div>
+            <div class="form-group">
+              <label class="form-label" for="popup-link-url">링크 URL (선택)</label>
+              <input class="form-control form-control-wide" type="url" id="popup-link-url" name="linkUrl" placeholder="https://">
+              <p class="form-hint">입력 시 팝업 이미지를 클릭하면 해당 주소로 이동합니다.</p>
             </div>
             <div class="form-row popup-form-row">
               <div class="form-group">

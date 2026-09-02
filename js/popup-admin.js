@@ -63,6 +63,12 @@
     return `${start} ~ ${end}`;
   }
 
+  function imageLabel(popup) {
+    if (!popup.imageUrl) return '(이미지 없음)';
+    const name = popup.imageUrl.split('/').pop();
+    return name || '이미지 등록됨';
+  }
+
   function statusBadge(popup) {
     if (!popup.enabled) return '<span class="popup-badge popup-badge--off">OFF</span>';
     return '<span class="popup-badge popup-badge--on">ON</span>';
@@ -89,7 +95,6 @@
     popupForm.reset();
     document.getElementById('popup-id').value = '';
     imageUrlInput.value = '';
-    document.getElementById('popup-link-label').value = '자세히 보기';
     setImagePreview('');
     imageFileInput.value = '';
   }
@@ -99,11 +104,8 @@
     if (popup) {
       editorHeading.textContent = '팝업 수정';
       document.getElementById('popup-id').value = popup.id;
-      document.getElementById('popup-title').value = popup.title;
-      document.getElementById('popup-body').value = popup.body;
       imageUrlInput.value = popup.imageUrl || '';
       document.getElementById('popup-link-url').value = popup.linkUrl || '';
-      document.getElementById('popup-link-label').value = popup.linkLabel || '자세히 보기';
       document.getElementById('popup-starts').value = popup.startsAt || '';
       document.getElementById('popup-ends').value = popup.endsAt || '';
       document.getElementById('popup-enabled').checked = !!popup.enabled;
@@ -136,7 +138,7 @@
         (popup, index) => `
       <tr>
         <td>${popupsCache.length - index}</td>
-        <td class="popup-col-title">${escapeHtml(popup.title || '(제목 없음)')}</td>
+        <td class="popup-col-image">${escapeHtml(imageLabel(popup))}</td>
         <td>${statusBadge(popup)}</td>
         <td class="popup-col-period">${escapeHtml(formatPeriod(popup))}</td>
         <td>
@@ -214,11 +216,11 @@
     event.preventDefault();
     const idRaw = document.getElementById('popup-id').value;
     const payload = {
-      title: document.getElementById('popup-title').value.trim(),
-      body: document.getElementById('popup-body').value.trim(),
+      title: '',
+      body: '',
       imageUrl: imageUrlInput.value.trim(),
       linkUrl: document.getElementById('popup-link-url').value.trim(),
-      linkLabel: document.getElementById('popup-link-label').value.trim() || '자세히 보기',
+      linkLabel: '',
       startsAt: document.getElementById('popup-starts').value,
       endsAt: document.getElementById('popup-ends').value,
       enabled: document.getElementById('popup-enabled').checked,
