@@ -22,11 +22,34 @@
         <figure class="layout-card__figure">
           <img src="img/place.jpg" alt="2026 대한민국 사회서비스 박람회 배치도">
         </figure>
+
+        <div class="layout-card__section">
+          <h2 class="layout-card__subtitle">참가업체 리스트</h2>
+          <div class="layout-card__scroll">
+            <table class="exhibitor-table">
+              <colgroup>
+                <col class="exhibitor-col exhibitor-col--booth">
+                <col class="exhibitor-col exhibitor-col--name">
+                <col class="exhibitor-col exhibitor-col--desc">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th scope="col" class="exhibitor-head exhibitor-head--booth">NO</th>
+                  <th scope="col" class="exhibitor-head exhibitor-head--name">기업명</th>
+                  <th scope="col" class="exhibitor-head exhibitor-head--desc">기업소개</th>
+                </tr>
+              </thead>
+              <tbody id="exhibitor-list-body"></tbody>
+            </table>
+          </div>
+          <p class="exhibitor-empty" id="exhibitor-list-empty" hidden>참가업체 정보를 불러오지 못했습니다.</p>
+        </div>
       </div>
     </div>
   </main>
 
   <div id="site-footer"></div>
   <script src="js/common.js"></script>
+  <script src="js/layout.js"></script>
 </body>
 </html>
