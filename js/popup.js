@@ -46,11 +46,9 @@
           <div class="site-popup__image-wrap" hidden>
             <img class="site-popup__image" alt="">
           </div>
-          <div class="site-popup__body">
-            <h2 class="site-popup__title" id="site-popup-title"></h2>
-            <div class="site-popup__text"></div>
-            <a class="btn btn-primary site-popup__link" hidden target="_blank" rel="noopener noreferrer"></a>
-          </div>
+          <h2 class="site-popup__title" id="site-popup-title"></h2>
+          <div class="site-popup__text"></div>
+          <a class="btn btn-primary site-popup__link" hidden target="_blank" rel="noopener noreferrer"></a>
           <div class="site-popup__footer">
             <label class="site-popup__dismiss">
               <input type="checkbox" id="site-popup-dismiss-check">
@@ -121,11 +119,6 @@
     } else {
       linkEl.hidden = true;
       linkEl.removeAttribute('href');
-    }
-
-    const bodyEl = root.querySelector('.site-popup__body');
-    if (bodyEl) {
-      bodyEl.hidden = titleEl.hidden && textEl.hidden && linkEl.hidden;
     }
 
     const dismissCheck = root.querySelector('#site-popup-dismiss-check');
