@@ -123,7 +123,7 @@ async function handleRegistrationsApi(req, res) {
       return res.status(403).json({
         ok: false,
         error: 'closed',
-        message: '사전등록이 마감되었습니다. 박람회 현장에서 현장등록 하시기 바랍니다.',
+        message: '사전등록이 마감되었습니다. 추가 등록은 박람회 현장등록대에서 안내를 받고 등록해주시기 바랍니다. 감사합니다.',
       });
     }
 
