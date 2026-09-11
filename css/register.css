@@ -13,11 +13,11 @@
 }
 
 .register-closed__desc {
-  margin-top: 12px;
+  margin-top: 20px;
   font-size: 16px;
   font-weight: 500;
   color: var(--text);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .register-closed .btn-group {
