@@ -120,29 +120,11 @@ async function handleRegistrationsApi(req, res) {
     }
 
     if (action === 'register') {
-      const required = [
-        'name', 'org', 'orgType', 'title', 'phone', 'email', 'forumApply', 'forumApplyLabel', 'password',
-      ];
-      for (const key of required) {
-        if (!body[key] || String(body[key]).trim() === '') {
-          return res.status(400).json({ ok: false, error: `missing_${key}` });
-        }
-      }
-      const entry = {
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
-        name: String(body.name).trim(),
-        org: String(body.org).trim(),
-        orgType: String(body.orgType).trim(),
-        title: String(body.title).trim(),
-        phone: String(body.phone).trim(),
-        email: String(body.email).trim(),
-        forumApply: String(body.forumApply),
-        forumApplyLabel: String(body.forumApplyLabel),
-        password: String(body.password),
-      };
-      await db.insertRegistration(entry);
-      return res.status(201).json({ ok: true, registration: entry });
+      return res.status(403).json({
+        ok: false,
+        error: 'closed',
+        message: '사전등록이 마감되었습니다. 박람회 현장에서 현장등록 하시기 바랍니다.',
+      });
     }
 
     return res.status(400).json({ ok: false, error: 'unknown_action' });
