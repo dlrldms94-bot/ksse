@@ -21,12 +21,12 @@
       ],
     },
     {
-      label: '사전등록',
+      label: '현장등록',
       key: 'register',
       href: 'register.html',
       children: [
-        { label: '사전등록', href: 'register.html' },
-        { label: '사전신청확인', href: 'register-check.html' },
+        { label: '현장등록', href: 'register.html' },
+        { label: '현장신청확인', href: 'register-check.html' },
         { label: '관람 안내', href: 'guide.html' },
       ],
     },

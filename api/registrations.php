@@ -86,11 +86,32 @@ if ($method === 'POST') {
     }
 
     if ($action === 'register') {
-        json_response(403, [
-            'ok' => false,
-            'error' => 'closed',
-            'message' => '사전등록이 마감되었습니다. 참여를 원하시는 분께서는 박람회 등록대에서 현장등록이 가능하오니, 안내에 따라 등록해주시기 바랍니다. 많은 관심과 참여 부탁드립니다. 감사합니다.',
-        ]);
+        $required = ['name', 'org', 'orgType', 'title', 'phone', 'email', 'forumApply', 'forumApplyLabel', 'password'];
+        foreach ($required as $key) {
+            if (!isset($body[$key]) || trim((string) $body[$key]) === '') {
+                json_response(400, ['ok' => false, 'error' => 'missing_' . $key]);
+            }
+        }
+
+        $list = read_registrations($dataFile);
+        $entry = [
+            'id' => (int) round(microtime(true) * 1000),
+            'createdAt' => gmdate('c'),
+            'name' => trim((string) $body['name']),
+            'org' => trim((string) $body['org']),
+            'orgType' => trim((string) $body['orgType']),
+            'title' => trim((string) $body['title']),
+            'phone' => trim((string) $body['phone']),
+            'email' => trim((string) $body['email']),
+            'forumApply' => (string) $body['forumApply'],
+            'forumApplyLabel' => (string) $body['forumApplyLabel'],
+            'password' => (string) $body['password'],
+        ];
+        $list[] = $entry;
+        if (!write_registrations($dataFile, $list)) {
+            json_response(500, ['ok' => false, 'error' => 'write_failed']);
+        }
+        json_response(201, ['ok' => true, 'registration' => $entry]);
     }
 
     json_response(400, ['ok' => false, 'error' => 'unknown_action']);

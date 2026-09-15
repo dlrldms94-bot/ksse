@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!found) {
       result.innerHTML =
-        '<p class="result-fail">일치하는 사전등록 정보가 없습니다.<br>입력 내용을 다시 확인해 주세요.</p>';
+        '<p class="result-fail">일치하는 현장등록 정보가 없습니다.<br>입력 내용을 다시 확인해 주세요.</p>';
       return;
     }
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const forumText = window.KSSE.formatForumApplyLabel(found.forumApply, found.forumApplyLabel);
     const forumHtml = escapeHtml(forumText).replace(/\n/g, '<br>');
     result.innerHTML = `
-      <h3>사전등록이 확인되었습니다.</h3>
+      <h3>현장등록이 확인되었습니다.</h3>
       <div class="info-list">
         <div class="info-row"><span class="info-label">이름</span><div class="info-value">${escapeHtml(found.name)}</div></div>
         <div class="info-row"><span class="info-label">소속</span><div class="info-value">${escapeHtml(found.org)}</div></div>

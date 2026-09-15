@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    alert('사전등록이 완료되었습니다.\n사전신청확인 페이지에서 등록 내용을 확인할 수 있습니다.');
+    alert('현장등록이 완료되었습니다.\n현장신청확인 페이지에서 등록 내용을 확인할 수 있습니다.');
     location.href = 'register-check.html';
   });
 });
