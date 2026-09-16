@@ -86,32 +86,11 @@ if ($method === 'POST') {
     }
 
     if ($action === 'register') {
-        $required = ['name', 'org', 'orgType', 'title', 'phone', 'email', 'forumApply', 'forumApplyLabel', 'password'];
-        foreach ($required as $key) {
-            if (!isset($body[$key]) || trim((string) $body[$key]) === '') {
-                json_response(400, ['ok' => false, 'error' => 'missing_' . $key]);
-            }
-        }
-
-        $list = read_registrations($dataFile);
-        $entry = [
-            'id' => (int) round(microtime(true) * 1000),
-            'createdAt' => gmdate('c'),
-            'name' => trim((string) $body['name']),
-            'org' => trim((string) $body['org']),
-            'orgType' => trim((string) $body['orgType']),
-            'title' => trim((string) $body['title']),
-            'phone' => trim((string) $body['phone']),
-            'email' => trim((string) $body['email']),
-            'forumApply' => (string) $body['forumApply'],
-            'forumApplyLabel' => (string) $body['forumApplyLabel'],
-            'password' => (string) $body['password'],
-        ];
-        $list[] = $entry;
-        if (!write_registrations($dataFile, $list)) {
-            json_response(500, ['ok' => false, 'error' => 'write_failed']);
-        }
-        json_response(201, ['ok' => true, 'registration' => $entry]);
+        json_response(403, [
+            'ok' => false,
+            'error' => 'closed',
+            'message' => '현장등록이 마감되었습니다. 2026 대한민국 사회서비스 박람회가 종료되었습니다. 많은 관심과 참여에 감사드립니다.',
+        ]);
     }
 
     json_response(400, ['ok' => false, 'error' => 'unknown_action']);
